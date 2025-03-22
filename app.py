@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, send_file, render_template_string
 import pandas as pd
 from io import BytesIO
 import xlsxwriter
+import os
 
 app = Flask(__name__)
 
@@ -221,11 +222,9 @@ def index():
 def download_sample():
     output = BytesIO()
     with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-        # GSTR-2B Sample Sheet
         gstr2b_headers = ['GSTN', 'Invoice Number', 'Date', 'Taxable Value', 'IGST', 'CGST', 'SGST']
         pd.DataFrame(columns=gstr2b_headers).to_excel(writer, sheet_name='GSTR-2B', index=False)
         
-        # GSTR-3B Sample Sheet
         gstr3b_headers = ['Date', 'Particulars', 'Invoice Number', 'GSTN', 'GST Rate', 'Taxable Value', 
                           'IGST', 'CGST', 'SGST', 'Other', 'Invoice Value']
         pd.DataFrame(columns=gstr3b_headers).to_excel(writer, sheet_name='GSTR-3B', index=False)
@@ -255,20 +254,16 @@ def reconcile():
                                                    'Taxable Value', 'IGST', 'CGST', 'SGST', 'Other', 'Invoice Value'])
     difference_allowed = data['difference']
 
-    # Convert numeric columns to float
     for col in ['Taxable Value', 'IGST', 'CGST', 'SGST']:
         gstr2b[col] = pd.to_numeric(gstr2b[col], errors='coerce').fillna(0)
         gstr3b[col] = pd.to_numeric(gstr3b[col], errors='coerce').fillna(0)
 
-    # Add a column for color
     gstr2b['Color'] = ''
     gstr3b['Color'] = ''
 
-    # Reconciliation Logic
     for i, row2b in gstr2b.iterrows():
         matched = False
         for j, row3b in gstr3b.iterrows():
-            # Step 1: Check GSTN, Invoice Number, Date
             if (row2b['GSTN'] == row3b['GSTN'] and 
                 row2b['Invoice Number'] == row3b['Invoice Number'] and 
                 row2b['Date'] == row3b['Date']):
@@ -283,7 +278,6 @@ def reconcile():
         
         if not matched:
             for j, row3b in gstr3b.iterrows():
-                # Step 2: Check GSTN and Invoice Number
                 if (row2b['GSTN'] == row3b['GSTN'] and 
                     row2b['Invoice Number'] == row3b['Invoice Number']):
                     gstr2b.at[i, 'Color'] = 'pink'
@@ -292,14 +286,11 @@ def reconcile():
                     break
         
         if not matched:
-            # Step 3: Check only GSTN
             if row2b['GSTN'] in gstr3b['GSTN'].values:
                 gstr2b.at[i, 'Color'] = 'pink'
             else:
-                # Step 4: GSTN not in GSTR-3B
                 gstr2b.at[i, 'Color'] = 'brown'
 
-    # Check GSTR-3B entries not in GSTR-2B
     for j, row3b in gstr3b.iterrows():
         if row3b['Color'] == '':
             if row3b['GSTN'] not in gstr2b['GSTN'].values:
@@ -307,11 +298,9 @@ def reconcile():
             else:
                 gstr3b.at[j, 'Color'] = 'pink'
 
-    # Prepare data for front-end
     gstr2b_list = gstr2b.drop(columns=['Color']).values.tolist()
     gstr3b_list = gstr3b.drop(columns=['Color']).values.tolist()
 
-    # Store reconciled data with colors for download
     app.config['reconciled_gstr2b'] = gstr2b
     app.config['reconciled_gstr3b'] = gstr3b
 
@@ -326,7 +315,6 @@ def download_result():
         brown_format = workbook.add_format({'bg_color': '#8d5524', 'font_color': '#ffffff'})
         pink_format = workbook.add_format({'bg_color': '#ff6b81', 'font_color': '#ffffff'})
 
-        # Write GSTR-2B
         gstr2b = app.config['reconciled_gstr2b']
         gstr2b.to_excel(writer, sheet_name='GSTR-2B', index=False)
         worksheet = writer.sheets['GSTR-2B']
@@ -335,7 +323,6 @@ def download_result():
             if row['Color'] in format_dict:
                 worksheet.set_row(i + 1, None, format_dict[row['Color']])
 
-        # Write GSTR-3B
         gstr3b = app.config['reconciled_gstr3b']
         gstr3b.to_excel(writer, sheet_name='GSTR-3B', index=False)
         worksheet = writer.sheets['GSTR-3B']
@@ -347,4 +334,5 @@ def download_result():
     return send_file(output, download_name='GST_Reconciliation_Result.xlsx', as_attachment=True)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False)
