@@ -6,86 +6,106 @@
     <title>GST Reconciliation Tool</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 20px; 
-            color: #333; 
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            padding: 20px;
+            color: #2c3e50;
+            line-height: 1.6;
         }
-        h1 { 
-            text-align: center; 
-            color: #2c3e50; 
-            margin-bottom: 20px; 
-            font-size: 2.5em; 
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1); 
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #34495e;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
-        .controls { 
-            text-align: center; 
-            margin-bottom: 30px; 
-            background: #fff; 
-            padding: 20px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+        .controls {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
-        .controls input, .controls button { 
-            padding: 10px; 
-            margin: 5px; 
-            border-radius: 5px; 
-            border: 1px solid #ddd; 
+        .controls input, .controls button {
+            padding: 12px 20px;
+            margin: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+            transition: all 0.3s ease;
         }
-        .controls button { 
-            background: #3498db; 
-            color: white; 
-            border: none; 
-            cursor: pointer; 
-            transition: background 0.3s; 
+        .controls input[type="file"] { border: none; }
+        .controls button {
+            background: #1abc9c;
+            color: white;
+            border: none;
+            cursor: pointer;
         }
-        .controls button:hover { background: #2980b9; }
-        .container { 
-            display: flex; 
-            justify-content: space-around; 
-            flex-wrap: wrap; 
-            gap: 20px; 
+        .controls button:hover {
+            background: #16a085;
+            transform: translateY(-2px);
         }
-        .section { 
-            width: 48%; 
-            background: #fff; 
-            padding: 20px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
-            min-width: 300px; 
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
         }
-        .section h2 { 
-            color: #2c3e50; 
-            margin-bottom: 15px; 
-            font-size: 1.5em; 
+        .section {
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
         }
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            font-size: 0.9em; 
+        .section h2 {
+            color: #34495e;
+            margin-bottom: 20px;
+            font-size: 1.8em;
         }
-        th, td { 
-            border: 1px solid #ddd; 
-            padding: 10px; 
-            text-align: left; 
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
         }
-        th { 
-            background: #34495e; 
-            color: white; 
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            white-space: nowrap;
         }
-        .green { background-color: #2ecc71; color: white; }
-        .brown { background-color: #8d5524; color: white; }
-        .pink { background-color: #ff6b81; color: white; }
-        #result { 
-            text-align: center; 
-            margin-top: 20px; 
-            font-weight: bold; 
+        th {
+            background: #34495e;
+            color: white;
+            font-weight: 600;
         }
-        @media (max-width: 768px) { 
-            .section { width: 100%; } 
+        td[contenteditable="true"] {
+            background: #f9f9f9;
+            cursor: text;
+        }
+        .match-full { background-color: #2ecc71; color: white; }
+        .match-partial { background-color: #3498db; color: white; }
+        .match-gstn { background-color: #f1c40f; color: #2c3e50; }
+        .unmatched-2b { background-color: #e67e22; color: white; }
+        .unmatched-3b { background-color: #e74c3c; color: white; }
+        #result {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: 600;
+            color: #34495e;
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .controls { padding: 15px; }
+            .section { padding: 15px; }
+            th, td { padding: 8px; font-size: 0.85em; }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <h1>GST Reconciliation Tool</h1>
@@ -94,30 +114,41 @@
         <input type="file" id="fileInput" accept=".xlsx" onchange="uploadFile()">
         <br>
         <label for="difference">Allowable Difference (Rs):</label>
-        <input type="number" id="difference" min="0" required>
+        <input type="number" id="difference" min="0" required placeholder="e.g., 100">
         <button onclick="reconcile()">Reconcile</button>
         <div id="result"></div>
     </div>
     <div class="container">
         <div class="section" id="gstr2b">
-            <h2>GSTR-2B</h2>
+            <h2>GSTR-2B Data</h2>
             <table id="gstr2bTable">
                 <thead>
                     <tr>
-                        <th>GSTN</th>
+                        <th>GSTIN of Supplier</th>
+                        <th>Trade/Legal name</th>
+                        <th>Document Type</th>
                         <th>Invoice Number</th>
-                        <th>Date</th>
+                        <th>Document Date</th>
+                        <th>Document Value</th>
                         <th>Taxable Value</th>
                         <th>IGST</th>
                         <th>CGST</th>
                         <th>SGST</th>
+                        <th>Cess</th>
+                        <th>Tax Rate</th>
+                        <th>Place of Supply</th>
+                        <th>Supply Type</th>
+                        <th>ITC Availability</th>
+                        <th>Reason</th>
+                        <th>Applicable % of Tax Rate</th>
+                        <th>Reversal</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
         </div>
         <div class="section" id="gstr3b">
-            <h2>GSTR-3B</h2>
+            <h2>GSTR-3B Data</h2>
             <table id="gstr3bTable">
                 <thead>
                     <tr>
@@ -149,12 +180,29 @@
         let reconciledGstr2b = [];
         let reconciledGstr3b = [];
 
+        // Date Formatting Function (dd-mmm-yyyy)
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            if (isNaN(date)) return dateStr; // Return as-is if not a valid date
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = date.toLocaleString('default', { month: 'short' });
+            const year = date.getFullYear();
+            return `${day}-${month}-${year}`;
+        }
+
         // Download Sample Sheet
         function downloadSampleSheet() {
             const wb = XLSX.utils.book_new();
-            const gstr2bHeaders = ['GSTN', 'Invoice Number', 'Date', 'Taxable Value', 'IGST', 'CGST', 'SGST'];
-            const gstr3bHeaders = ['Date', 'Particulars', 'Invoice Number', 'GSTN', 'GST Rate', 'Taxable Value', 
-                                  'IGST', 'CGST', 'SGST', 'Other', 'Invoice Value'];
+            const gstr2bHeaders = [
+                'GSTIN of Supplier', 'Trade/Legal name', 'Document Type', 'Invoice Number', 'Document Date',
+                'Document Value', 'Taxable Value', 'IGST', 'CGST', 'SGST', 'Cess', 'Tax Rate',
+                'Place of Supply', 'Supply Type', 'ITC Availability', 'Reason', 'Applicable % of Tax Rate', 'Reversal'
+            ];
+            const gstr3bHeaders = [
+                'Date', 'Particulars', 'Invoice Number', 'GSTN', 'GST Rate', 'Taxable Value',
+                'IGST', 'CGST', 'SGST', 'Other', 'Invoice Value'
+            ];
             
             const gstr2bSheet = XLSX.utils.aoa_to_sheet([gstr2bHeaders]);
             const gstr3bSheet = XLSX.utils.aoa_to_sheet([gstr3bHeaders]);
@@ -183,115 +231,147 @@
                 
                 // Parse GSTR-2B
                 const gstr2bSheet = workbook.Sheets['GSTR-2B'];
-                gstr2bData = XLSX.utils.sheet_to_json(gstr2bSheet, { header: 1 }).slice(1); // Skip header
+                gstr2bData = XLSX.utils.sheet_to_json(gstr2bSheet, { header: 1 }).slice(1);
                 
                 // Parse GSTR-3B
                 const gstr3bSheet = workbook.Sheets['GSTR-3B'];
-                gstr3bData = XLSX.utils.sheet_to_json(gstr3bSheet, { header: 1 }).slice(1); // Skip header
+                gstr3bData = XLSX.utils.sheet_to_json(gstr3bSheet, { header: 1 }).slice(1);
                 
-                displayData(gstr2bData, 'gstr2bTable');
-                displayData(gstr3bData, 'gstr3bTable');
-                document.getElementById('result').innerText = 'Data uploaded successfully.';
+                displayEditableData(gstr2bData, 'gstr2bTable', 18);
+                displayEditableData(gstr3bData, 'gstr3bTable', 11);
+                document.getElementById('result').innerText = 'Data uploaded successfully. Edit as needed.';
             };
             reader.readAsArrayBuffer(file);
         }
 
-        // Display Data in Table
-        function displayData(data, tableId) {
+        // Display Editable Data with Date Formatting
+        function displayEditableData(data, tableId, columnCount) {
             const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
             table.innerHTML = '';
-            data.forEach(row => {
+            data.forEach((row, rowIndex) => {
                 const tr = document.createElement('tr');
-                row.forEach(cell => {
+                for (let i = 0; i < columnCount; i++) {
                     const td = document.createElement('td');
-                    td.textContent = cell || '';
+                    const value = row[i] || '';
+                    // Format date for GSTR-2B (col 4) and GSTR-3B (col 0)
+                    if ((tableId === 'gstr2bTable' && i === 4) || (tableId === 'gstr3bTable' && i === 0)) {
+                        td.textContent = formatDate(value);
+                    } else {
+                        td.textContent = value;
+                    }
+                    td.setAttribute('contenteditable', 'true');
+                    td.addEventListener('input', () => updateData(tableId, rowIndex, i, td.textContent));
                     tr.appendChild(td);
-                });
+                }
                 table.appendChild(tr);
             });
         }
 
-        // Reconcile Data
+        // Update Data on Edit
+        function updateData(tableId, rowIndex, colIndex, value) {
+            const data = tableId === 'gstr2bTable' ? gstr2bData : gstr3bData;
+            data[rowIndex][colIndex] = value;
+        }
+
+        // Reconciliation Logic
         function reconcile() {
-            const difference = parseFloat(document.getElementById('difference').value);
-            if (!difference || difference < 0) {
+            const difference = parseFloat(document.getElementById('difference').value) || 0;
+            if (difference < 0) {
                 alert('Please enter a valid allowable difference.');
                 return;
             }
 
-            reconciledGstr2b = gstr2bData.map(row => [...row, '']); // Add color column
-            reconciledGstr3b = gstr3bData.map(row => [...row, '']); // Add color column
+            reconciledGstr2b = gstr2bData.map(row => [...row, '']);
+            reconciledGstr3b = gstr3bData.map(row => [...row, '']);
 
+            // Step 1: Full Match (GSTN + Invoice Number + Date)
             for (let i = 0; i < reconciledGstr2b.length; i++) {
-                let matched = false;
                 const row2b = reconciledGstr2b[i];
+                const key2b = `${row2b[0] || ''}-${row2b[3] || ''}-${row2b[4] || ''}`; // GSTIN, Invoice Number, Date
                 for (let j = 0; j < reconciledGstr3b.length; j++) {
                     const row3b = reconciledGstr3b[j];
-                    // Step 1: GSTN, Invoice Number, Date match
-                    if (row2b[0] === row3b[3] && row2b[1] === row3b[2] && row2b[2] === row3b[0]) {
-                        const taxableDiff = Math.abs(parseFloat(row2b[3] || 0) - parseFloat(row3b[5] || 0));
-                        const igstDiff = Math.abs(parseFloat(row2b[4] || 0) - parseFloat(row3b[6] || 0));
-                        const cgstDiff = Math.abs(parseFloat(row2b[5] || 0) - parseFloat(row3b[7] || 0));
-                        const sgstDiff = Math.abs(parseFloat(row2b[6] || 0) - parseFloat(row3b[8] || 0));
+                    const key3b = `${row3b[3] || ''}-${row3b[2] || ''}-${row3b[0] || ''}`; // GSTN, Invoice Number, Date
+                    if (key2b === key3b && !reconciledGstr3b[j][11]) {
+                        const taxableDiff = Math.abs(parseFloat(row2b[6] || 0) - parseFloat(row3b[5] || 0));
+                        const igstDiff = Math.abs(parseFloat(row2b[7] || 0) - parseFloat(row3b[6] || 0));
+                        const cgstDiff = Math.abs(parseFloat(row2b[8] || 0) - parseFloat(row3b[7] || 0));
+                        const sgstDiff = Math.abs(parseFloat(row2b[9] || 0) - parseFloat(row3b[8] || 0));
                         if (taxableDiff <= difference && igstDiff <= difference && cgstDiff <= difference && sgstDiff <= difference) {
-                            reconciledGstr2b[i][7] = 'green';
-                            reconciledGstr3b[j][11] = 'green';
-                            matched = true;
+                            reconciledGstr2b[i][18] = 'match-full';
+                            reconciledGstr3b[j][11] = 'match-full';
                             break;
                         }
-                    }
-                }
-
-                if (!matched) {
-                    for (let j = 0; j < reconciledGstr3b.length; j++) {
-                        const row3b = reconciledGstr3b[j];
-                        // Step 2: GSTN and Invoice Number match
-                        if (row2b[0] === row3b[3] && row2b[1] === row3b[2]) {
-                            reconciledGstr2b[i][7] = 'pink';
-                            reconciledGstr3b[j][11] = 'pink';
-                            matched = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (!matched) {
-                    // Step 3: Only GSTN match
-                    if (reconciledGstr3b.some(row => row[3] === row2b[0])) {
-                        reconciledGstr2b[i][7] = 'pink';
-                    } else {
-                        // Step 4: GSTN not in GSTR-3B
-                        reconciledGstr2b[i][7] = 'brown';
                     }
                 }
             }
 
-            // Check GSTR-3B entries not in GSTR-2B
+            // Step 2: Partial Match (GSTN + Invoice Number)
+            for (let i = 0; i < reconciledGstr2b.length; i++) {
+                if (reconciledGstr2b[i][18]) continue;
+                const row2b = reconciledGstr2b[i];
+                const key2b = `${row2b[0] || ''}-${row2b[3] || ''}`;
+                for (let j = 0; j < reconciledGstr3b.length; j++) {
+                    if (reconciledGstr3b[j][11]) continue;
+                    const row3b = reconciledGstr3b[j];
+                    const key3b = `${row3b[3] || ''}-${row3b[2] || ''}`;
+                    if (key2b === key3b) {
+                        reconciledGstr2b[i][18] = 'match-partial';
+                        reconciledGstr3b[j][11] = 'match-partial';
+                        break;
+                    }
+                }
+            }
+
+            // Step 3: GSTN-only Match
+            for (let i = 0; i < reconciledGstr2b.length; i++) {
+                if (reconciledGstr2b[i][18]) continue;
+                const row2b = reconciledGstr2b[i];
+                if (reconciledGstr3b.some(row => !row[11] && row[3] === row2b[0])) {
+                    reconciledGstr2b[i][18] = 'match-gstn';
+                }
+            }
+            for (let j = 0; j < reconciledGstr3b.length; j++) {
+                if (reconciledGstr3b[j][11]) continue;
+                const row3b = reconciledGstr3b[j];
+                if (reconciledGstr2b.some(row => !row[18] && row[0] === row3b[3])) {
+                    reconciledGstr3b[j][11] = 'match-gstn';
+                }
+            }
+
+            // Step 4: Unmatched Entries
+            for (let i = 0; i < reconciledGstr2b.length; i++) {
+                if (!reconciledGstr2b[i][18]) {
+                    reconciledGstr2b[i][18] = 'unmatched-2b';
+                }
+            }
             for (let j = 0; j < reconciledGstr3b.length; j++) {
                 if (!reconciledGstr3b[j][11]) {
-                    if (!reconciledGstr2b.some(row => row[0] === reconciledGstr3b[j][3])) {
-                        reconciledGstr3b[j][11] = 'brown';
-                    } else {
-                        reconciledGstr3b[j][11] = 'pink';
-                    }
+                    reconciledGstr3b[j][11] = 'unmatched-3b';
                 }
             }
 
-            displayReconciledData(reconciledGstr2b, 'gstr2bTable');
-            displayReconciledData(reconciledGstr3b, 'gstr3bTable');
-            document.getElementById('result').innerHTML = '<button onclick="downloadResult()">Download Reconciliation Result</button>';
+            displayReconciledData(reconciledGstr2b, 'gstr2bTable', 18);
+            displayReconciledData(reconciledGstr3b, 'gstr3bTable', 11);
+            document.getElementById('result').innerHTML = '<button onclick="downloadResult()">Download Reconciled File</button>';
         }
 
-        // Display Reconciled Data with Colors
-        function displayReconciledData(data, tableId) {
+        // Display Reconciled Data with Colors and Date Formatting
+        function displayReconciledData(data, tableId, columnCount) {
             const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
             table.innerHTML = '';
-            data.forEach(row => {
+            data.forEach((row, rowIndex) => {
                 const tr = document.createElement('tr');
-                const color = row[row.length - 1]; // Last column is color
-                for (let i = 0; i < row.length - 1; i++) { // Skip color column
+                const color = row[columnCount];
+                for (let i = 0; i < columnCount; i++) {
                     const td = document.createElement('td');
-                    td.textContent = row[i] || '';
+                    const value = row[i] || '';
+                    if ((tableId === 'gstr2bTable' && i === 4) || (tableId === 'gstr3bTable' && i === 0)) {
+                        td.textContent = formatDate(value);
+                    } else {
+                        td.textContent = value;
+                    }
+                    td.setAttribute('contenteditable', 'true');
+                    td.addEventListener('input', () => updateData(tableId, rowIndex, i, td.textContent));
                     if (color) tr.className = color;
                     tr.appendChild(td);
                 }
@@ -302,28 +382,41 @@
         // Download Reconciled Result
         function downloadResult() {
             const wb = XLSX.utils.book_new();
-            const gstr2bHeaders = ['GSTN', 'Invoice Number', 'Date', 'Taxable Value', 'IGST', 'CGST', 'SGST'];
-            const gstr3bHeaders = ['Date', 'Particulars', 'Invoice Number', 'GSTN', 'GST Rate', 'Taxable Value', 
-                                  'IGST', 'CGST', 'SGST', 'Other', 'Invoice Value'];
+            const gstr2bHeaders = [
+                'GSTIN of Supplier', 'Trade/Legal name', 'Document Type', 'Invoice Number', 'Document Date',
+                'Document Value', 'Taxable Value', 'IGST', 'CGST', 'SGST', 'Cess', 'Tax Rate',
+                'Place of Supply', 'Supply Type', 'ITC Availability', 'Reason', 'Applicable % of Tax Rate', 'Reversal'
+            ];
+            const gstr3bHeaders = [
+                'Date', 'Particulars', 'Invoice Number', 'GSTN', 'GST Rate', 'Taxable Value',
+                'IGST', 'CGST', 'SGST', 'Other', 'Invoice Value'
+            ];
             
-            const gstr2bSheetData = [gstr2bHeaders].concat(reconciledGstr2b.map(row => row.slice(0, -1))); // Remove color
-            const gstr3bSheetData = [gstr3bHeaders].concat(reconciledGstr3b.map(row => row.slice(0, -1))); // Remove color
+            const gstr2bSheetData = [gstr2bHeaders].concat(reconciledGstr2b.map(row => row.slice(0, -1)));
+            const gstr3bSheetData = [gstr3bHeaders].concat(reconciledGstr3b.map(row => row.slice(0, -1)));
             
             const gstr2bSheet = XLSX.utils.aoa_to_sheet(gstr2bSheetData);
             const gstr3bSheet = XLSX.utils.aoa_to_sheet(gstr3bSheetData);
 
-            // Apply colors
+            const colorMap = {
+                'match-full': '2ECC71',
+                'match-partial': '3498DB',
+                'match-gstn': 'F1C40F',
+                'unmatched-2b': 'E67E22',
+                'unmatched-3b': 'E74C3C'
+            };
+
             reconciledGstr2b.forEach((row, i) => {
-                const color = row[7];
-                const style = color ? { fill: { fgColor: { rgb: color === 'green' ? '2ECC71' : color === 'brown' ? '8D5524' : 'FF6B81' } } } : {};
-                for (let j = 0; j < 7; j++) {
+                const color = row[18];
+                const style = color ? { fill: { fgColor: { rgb: colorMap[color] } } } : {};
+                for (let j = 0; j < 18; j++) {
                     gstr2bSheet[XLSX.utils.encode_cell({ r: i + 1, c: j })].s = style;
                 }
             });
 
             reconciledGstr3b.forEach((row, i) => {
                 const color = row[11];
-                const style = color ? { fill: { fgColor: { rgb: color === 'green' ? '2ECC71' : color === 'brown' ? '8D5524' : 'FF6B81' } } } : {};
+                const style = color ? { fill: { fgColor: { rgb: colorMap[color] } } } : {};
                 for (let j = 0; j < 11; j++) {
                     gstr3bSheet[XLSX.utils.encode_cell({ r: i + 1, c: j })].s = style;
                 }
