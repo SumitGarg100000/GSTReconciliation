@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GST Reconciliation Tool</title>
-    <style>
+ <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
@@ -215,7 +215,6 @@
             return `${day}-${month}-${year}`;
         }
 
-        // Define headers in a scalable way
         const baseGstr2bHeaders = [
             'Match Criteria', 'GSTN', 'Name of Supplier', 'Invoice Number', 
             'Invoice type', 'Invoice Date', 'Invoice Value', 'Place of supply', 'Reverse Charge', 
@@ -252,24 +251,20 @@
             const ws1 = XLSX.utils.aoa_to_sheet(gstr2bSample);
             gstr2bSampleHeaders.forEach((_, index) => {
                 const cell = ws1[XLSX.utils.encode_cell({ r: 0, c: index })];
-                if (cell) {
-                    cell.s = { fill: { fgColor: { rgb: 'E0FFFF' } } }; // Light Cyan
-                }
+                if (cell) cell.s = { fill: { fgColor: { rgb: 'E0FFFF' } } };
             });
             XLSX.utils.book_append_sheet(wb, ws1, 'GST Portal');
 
             const gstr3bSampleHeaders = gstr3bHeaders();
             const gstr3bSample = [
                 gstr3bSampleHeaders,
-                ['Match', '01-Mar-2025', '27AABCU9603R1ZM', 'Supplier A', 'INV001', 10002, 1802, 0, 0, 11806], // Changed to test 2 Rs difference
+                ['Match', '01-Mar-2025', '27AABCU9603R1ZM', 'Supplier A', 'INV001', 15000, 2700, 0, 0, 17700],
                 ['Match', '02-Mar-2025', '27AABCU9603R1ZM', 'Supplier A', 'INV004', 6000, 1080, 0, 0, 7080]
             ];
             const ws2 = XLSX.utils.aoa_to_sheet(gstr3bSample);
             gstr3bSampleHeaders.forEach((_, index) => {
                 const cell = ws2[XLSX.utils.encode_cell({ r: 0, c: index })];
-                if (cell) {
-                    cell.s = { fill: { fgColor: { rgb: 'E0FFFF' } } }; // Light Cyan
-                }
+                if (cell) cell.s = { fill: { fgColor: { rgb: 'E0FFFF' } } };
             });
             XLSX.utils.book_append_sheet(wb, ws2, 'Client Data');
 
@@ -287,9 +282,7 @@
         function normalizeRow(row, headerLength) {
             const normalized = new Array(headerLength).fill('');
             row.forEach((cell, index) => {
-                if (index < headerLength) {
-                    normalized[index] = cell === undefined || cell === null ? '' : cell;
-                }
+                if (index < headerLength) normalized[index] = cell === undefined || cell === null ? '' : cell;
             });
             return normalized;
         }
@@ -305,46 +298,73 @@
                 if (gstr2bSheet) {
                     const rawData = XLSX.utils.sheet_to_json(gstr2bSheet, { header: 1, raw: true, defval: '' });
                     gstr2bData = rawData.slice(1).map(row => normalizeRow(row, gstr2bHeaders().length));
-                    displayData(gstr2bData, 'gstr2b-container', gstr2bHeaders());
+                    displayData(gstr2bData, 'gstr2b-container', gstr2bHeaders(), 'gstr2b');
                 }
 
                 const gstr3bSheet = workbook.Sheets['Client Data'];
                 if (gstr3bSheet) {
                     const rawData = XLSX.utils.sheet_to_json(gstr3bSheet, { header: 1, raw: true, defval: '' });
                     gstr3bData = rawData.slice(1).map(row => normalizeRow(row, gstr3bHeaders().length));
-                    displayData(gstr3bData, 'gstr3b-container', gstr3bHeaders());
+                    displayData(gstr3bData, 'gstr3b-container', gstr3bHeaders(), 'gstr3b');
                 }
+
+                // Initial reconciliation after upload
+                reconcileData();
             };
             reader.readAsArrayBuffer(file);
         }
 
-        function displayData(data, containerId, headers) {
+        function displayData(data, containerId, headers, sheetType) {
             const container = document.getElementById(containerId);
             let html = '<table><thead><tr>';
             headers.forEach(header => html += `<th>${header}</th>`);
             html += '</tr></thead><tbody>';
-            data.forEach(row => {
-                html += '<tr>';
-                headers.forEach((_, index) => {
-                    const cell = row[index];
+            data.forEach((row, rowIndex) => {
+                html += `<tr data-row="${rowIndex}" data-sheet="${sheetType}">`;
+                headers.forEach((_, colIndex) => {
+                    const cell = row[colIndex];
                     const value = typeof cell === 'number' && (cell > 40000 && cell < 50000) ? formatDate(cell) : (cell === undefined || cell === null ? '' : cell);
-                    html += `<td${index === 0 ? ' class="match-criteria"' : ''}>${value}</td>`;
+                    const isEditable = colIndex > 0; // Only columns after "Match Criteria" are editable
+                    html += `<td contenteditable="${isEditable}" data-col="${colIndex}">${value}</td>`;
                 });
                 html += '</tr>';
             });
             html += '</tbody></table>';
             container.innerHTML = html;
+
+            // Add event listener for real-time editing
+            const table = container.querySelector('table');
+            table.addEventListener('input', handleCellEdit);
+        }
+
+        function handleCellEdit(event) {
+            const target = event.target;
+            if (target.tagName === 'TD' && target.hasAttribute('contenteditable')) {
+                const rowIndex = parseInt(target.parentElement.getAttribute('data-row'), 10);
+                const colIndex = parseInt(target.getAttribute('data-col'), 10);
+                const sheetType = target.parentElement.getAttribute('data-sheet');
+                const newValue = target.textContent.trim();
+
+                // Update the corresponding data array
+                if (sheetType === 'gstr2b') {
+                    gstr2bData[rowIndex][colIndex] = newValue;
+                } else if (sheetType === 'gstr3b') {
+                    gstr3bData[rowIndex][colIndex] = newValue;
+                }
+
+                // Trigger real-time reconciliation
+                reconcileData();
+            }
         }
 
         function reconcileData() {
             const diffInput = document.getElementById('diff-allowed').value;
-            const diffAllowed = diffInput === '' ? 0 : Number(diffInput) || 1; // Default to 1, blank means 0
+            const diffAllowed = diffInput === '' ? 0 : Number(diffInput) || 1;
             const gstr2bTable = document.querySelector('#gstr2b-container table tbody');
             const gstr3bTable = document.querySelector('#gstr3b-container table tbody');
             const reconciled2bData = [];
             const reconciled3bData = [];
 
-            // Reconcile GSTR-2B
             gstr2bData.forEach((row, index) => {
                 const match = findMatch(row, gstr2bData, gstr3bData, false, diffAllowed);
                 const newRow = [match, ...row.slice(1)];
@@ -352,7 +372,6 @@
                 updateRow(gstr2bTable.rows[index], newRow);
             });
 
-            // Reconcile GSTR-3B
             gstr3bData.forEach((row, index) => {
                 const match = findMatch(row, gstr3bData, gstr2bData, true, diffAllowed);
                 const newRow = [match, ...row.slice(1)];
@@ -366,41 +385,62 @@
 
         function updateRow(rowElement, newRow) {
             const match = newRow[0];
-            rowElement.cells[0].textContent = match;
+            Array.from(rowElement.cells).forEach((cell, index) => {
+                cell.textContent = newRow[index];
+            });
             colorRow(rowElement, match);
         }
 
         function findMatch(row, sourceData, compareData, is3b, diffAllowed) {
-    const sourceHeaders = is3b ? gstr3bHeaders() : gstr2bHeaders();
-    const compareHeaders = is3b ? gstr2bHeaders() : gstr3bHeaders();
-    const invDateIdx = sourceHeaders.indexOf('Invoice Date');
-    const gstnIdx = sourceHeaders.indexOf('GSTN');
-    const invNumIdx = sourceHeaders.indexOf('Invoice Number');
-    const compareGstnIdx = compareHeaders.indexOf('GSTN'); // Compare sheet ke liye correct GSTN index
+            const sourceHeaders = is3b ? gstr3bHeaders() : gstr2bHeaders();
+            const compareHeaders = is3b ? gstr2bHeaders() : gstr3bHeaders();
+            const invDateIdx = sourceHeaders.indexOf('Invoice Date');
+            const gstnIdx = sourceHeaders.indexOf('GSTN');
+            const invNumIdx = sourceHeaders.indexOf('Invoice Number');
+            const compareGstnIdx = compareHeaders.indexOf('GSTN');
 
-    const [invDate, gstn, invNum] = [row[invDateIdx], row[gstnIdx], row[invNumIdx]];
+            const [invDate, gstn, invNum] = [row[invDateIdx], row[gstnIdx], row[invNumIdx]];
 
-    // Step 1: GSTN, Invoice Number, Date check
-    const sourceTotals = calculateTotals(sourceData, invDate, gstn, invNum, is3b);
-    const compareTotals = calculateTotals(compareData, invDate, gstn, invNum, !is3b);
-    if (sourceTotals.count > 0 && compareTotals.count > 0) {
-        if (checkTotals(sourceTotals, compareTotals, diffAllowed)) {
-            return 'GSTN, Invoice No. & Date';
+            const sourceTotals = calculateTotals(sourceData, invDate, gstn, invNum, is3b);
+            const compareTotals = calculateTotals(compareData, invDate, gstn, invNum, !is3b);
+            if (sourceTotals.count > 0 && compareTotals.count > 0) {
+                if (checkTotals(sourceTotals, compareTotals, diffAllowed)) {
+                    return 'GSTN, Invoice No. & Date';
+                }
+            }
+
+            const invTotals = calculateTotalsByInv(sourceData, gstn, invNum, is3b);
+            const compareInvTotals = calculateTotalsByInv(compareData, gstn, invNum, !is3b);
+            if (invTotals.count > 0 && compareInvTotals.count > 0) {
+                if (checkTotals(invTotals, compareInvTotals, diffAllowed)) {
+                    return 'Invoice Number';
+                }
+            }
+
+            const gstnDateTotals = calculateTotalsByGstnDate(sourceData, invDate, gstn, is3b);
+            const compareGstnDateTotals = calculateTotalsByGstnDate(compareData, invDate, gstn, !is3b);
+            if (gstnDateTotals.count > 0 && compareGstnDateTotals.count > 0) {
+                if (checkTotals(gstnDateTotals, compareGstnDateTotals, diffAllowed)) {
+                    return 'GSTN & Date';
+                }
+            }
+
+            const gstnTotals = calculateTotalsByGstn(sourceData, gstn, is3b);
+            const compareGstnTotals = calculateTotalsByGstn(compareData, gstn, !is3b);
+            if (gstnTotals.count > 0 && compareGstnTotals.count > 0) {
+                if (checkTotals(gstnTotals, compareGstnTotals, diffAllowed)) {
+                    return 'GSTN';
+                }
+            }
+
+            const gstnExistsInCompare = compareData.some(r => r[compareGstnIdx] === gstn);
+            if (!gstnExistsInCompare) {
+                return 'GSTN-Not Match';
+            }
+
+            return 'Not match any creteria';
         }
-    }
 
-    // Step 2-4: Dusre criteria checks (Invoice Number, GSTN & Date, GSTN only)
-    // (Inhe bhi check kiya jata hai, lekin aapke case mein yeh fail honge kyunki diff > diffAllowed)
-
-    // Step 5: GSTN-Not Match check
-    const gstnExistsInCompare = compareData.some(r => r[compareGstnIdx] === gstn);
-    if (!gstnExistsInCompare) {
-        return 'GSTN-Not Match';
-    }
-
-    // Step 6: Default
-    return 'Not match any creteria';
-}
         function calculateTotals(data, invDate, gstn, invNum, is3b) {
             const headers = is3b ? gstr3bHeaders() : gstr2bHeaders();
             const invDateIdx = headers.indexOf('Invoice Date');
@@ -411,10 +451,17 @@
             const cgstIdx = headers.indexOf('CGST');
             const sgstIdx = headers.indexOf('SGST');
 
-            const filtered = data.filter(r => 
-                r[invDateIdx] === invDate && r[gstnIdx] === gstn && r[invNumIdx] === invNum
-            );
-            return sumValues(filtered, taxableIdx, igstIdx, cgstIdx, sgstIdx);
+            let count = 0, taxable = 0, igst = 0, cgst = 0, sgst = 0;
+            data.forEach(row => {
+                if (row[invDateIdx] === invDate && row[gstnIdx] === gstn && row[invNumIdx] === invNum) {
+                    count++;
+                    taxable += Number(row[taxableIdx]) || 0;
+                    igst += Number(row[igstIdx]) || 0;
+                    cgst += Number(row[cgstIdx]) || 0;
+                    sgst += Number(row[sgstIdx]) || 0;
+                }
+            });
+            return { count, taxable, igst, cgst, sgst };
         }
 
         function calculateTotalsByInv(data, gstn, invNum, is3b) {
@@ -426,8 +473,17 @@
             const cgstIdx = headers.indexOf('CGST');
             const sgstIdx = headers.indexOf('SGST');
 
-            const filtered = data.filter(r => r[gstnIdx] === gstn && r[invNumIdx] === invNum);
-            return sumValues(filtered, taxableIdx, igstIdx, cgstIdx, sgstIdx);
+            let count = 0, taxable = 0, igst = 0, cgst = 0, sgst = 0;
+            data.forEach(row => {
+                if (row[gstnIdx] === gstn && row[invNumIdx] === invNum) {
+                    count++;
+                    taxable += Number(row[taxableIdx]) || 0;
+                    igst += Number(row[igstIdx]) || 0;
+                    cgst += Number(row[cgstIdx]) || 0;
+                    sgst += Number(row[sgstIdx]) || 0;
+                }
+            });
+            return { count, taxable, igst, cgst, sgst };
         }
 
         function calculateTotalsByGstnDate(data, invDate, gstn, is3b) {
@@ -439,8 +495,17 @@
             const cgstIdx = headers.indexOf('CGST');
             const sgstIdx = headers.indexOf('SGST');
 
-            const filtered = data.filter(r => r[invDateIdx] === invDate && r[gstnIdx] === gstn);
-            return sumValues(filtered, taxableIdx, igstIdx, cgstIdx, sgstIdx);
+            let count = 0, taxable = 0, igst = 0, cgst = 0, sgst = 0;
+            data.forEach(row => {
+                if (row[invDateIdx] === invDate && row[gstnIdx] === gstn) {
+                    count++;
+                    taxable += Number(row[taxableIdx]) || 0;
+                    igst += Number(row[igstIdx]) || 0;
+                    cgst += Number(row[cgstIdx]) || 0;
+                    sgst += Number(row[sgstIdx]) || 0;
+                }
+            });
+            return { count, taxable, igst, cgst, sgst };
         }
 
         function calculateTotalsByGstn(data, gstn, is3b) {
@@ -451,38 +516,35 @@
             const cgstIdx = headers.indexOf('CGST');
             const sgstIdx = headers.indexOf('SGST');
 
-            const filtered = data.filter(r => r[gstnIdx] === gstn);
-            return sumValues(filtered, taxableIdx, igstIdx, cgstIdx, sgstIdx);
-        }
-
-        function sumValues(rows, taxableIdx, igstIdx, cgstIdx, sgstIdx) {
-            let taxable = 0, igst = 0, cgst = 0, sgst = 0, count = 0;
-            rows.forEach(row => {
-                taxable += Number(row[taxableIdx]) || 0;
-                igst += Number(row[igstIdx]) || 0;
-                cgst += Number(row[cgstIdx]) || 0;
-                sgst += Number(row[sgstIdx]) || 0;
-                count++;
+            let count = 0, taxable = 0, igst = 0, cgst = 0, sgst = 0;
+            data.forEach(row => {
+                if (row[gstnIdx] === gstn) {
+                    count++;
+                    taxable += Number(row[taxableIdx]) || 0;
+                    igst += Number(row[igstIdx]) || 0;
+                    cgst += Number(row[cgstIdx]) || 0;
+                    sgst += Number(row[sgstIdx]) || 0;
+                }
             });
-            return { taxable, igst, cgst, sgst, count };
+            return { count, taxable, igst, cgst, sgst };
         }
 
-        function checkTotals(sourceTotals, compareTotals, diffAllowed) {
-            return Math.abs(sourceTotals.taxable - compareTotals.taxable) <= diffAllowed &&
-                   Math.abs(sourceTotals.igst - compareTotals.igst) <= diffAllowed &&
-                   Math.abs(sourceTotals.cgst - compareTotals.cgst) <= diffAllowed &&
-                   Math.abs(sourceTotals.sgst - compareTotals.sgst) <= diffAllowed;
+        function checkTotals(source, compare, diffAllowed) {
+            return Math.abs(source.taxable - compare.taxable) <= diffAllowed &&
+                   Math.abs(source.igst - compare.igst) <= diffAllowed &&
+                   Math.abs(source.cgst - compare.cgst) <= diffAllowed &&
+                   Math.abs(source.sgst - compare.sgst) <= diffAllowed;
         }
 
-        function colorRow(row, match) {
-            row.className = '';
+        function colorRow(rowElement, match) {
+            rowElement.className = '';
             switch (match) {
-                case 'GSTN, Invoice No. & Date': row.classList.add('match-gstn-inv-date'); break;
-                case 'Invoice Number': row.classList.add('match-inv'); break;
-                case 'GSTN & Date': row.classList.add('match-gstn-date'); break;
-                case 'GSTN': row.classList.add('match-gstn'); break;
-                case 'GSTN-Not Match': row.classList.add('gstn-not-match'); break;
-                default: row.classList.add('no-match'); break;
+                case 'GSTN, Invoice No. & Date': rowElement.classList.add('match-gstn-inv-date'); break;
+                case 'Invoice Number': rowElement.classList.add('match-inv'); break;
+                case 'GSTN & Date': rowElement.classList.add('match-gstn-date'); break;
+                case 'GSTN': rowElement.classList.add('match-gstn'); break;
+                case 'GSTN-Not Match': rowElement.classList.add('gstn-not-match'); break;
+                default: rowElement.classList.add('no-match'); break;
             }
         }
 
@@ -494,12 +556,8 @@
             const sgstIdx = headers.indexOf('SGST');
 
             const criteria = [
-                'GSTN, Invoice No. & Date',
-                'Invoice Number',
-                'GSTN & Date',
-                'GSTN',
-                'GSTN-Not Match',
-                'Not match any creteria'
+                'GSTN, Invoice No. & Date', 'Invoice Number', 'GSTN & Date', 
+                'GSTN', 'GSTN-Not Match', 'Not match any creteria'
             ];
 
             const summary = {};
@@ -545,12 +603,8 @@
             html += '</tr></thead><tbody>';
 
             const criteria = [
-                'GSTN, Invoice No. & Date',
-                'Invoice Number',
-                'GSTN & Date',
-                'GSTN',
-                'GSTN-Not Match',
-                'Not match any creteria'
+                'GSTN, Invoice No. & Date', 'Invoice Number', 'GSTN & Date', 
+                'GSTN', 'GSTN-Not Match', 'Not match any creteria'
             ];
 
             criteria.forEach(criterion => {
@@ -586,11 +640,10 @@
         async function generateOutput(reconciled2bData, reconciled3bData) {
             const workbook = new ExcelJS.Workbook();
 
-            // GST Portal Sheet
             const ws1 = workbook.addWorksheet('GST Portal');
             const headerRow1 = ws1.addRow(gstr2bHeaders());
             headerRow1.eachCell(cell => {
-                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE0FFFF' } }; // Light Cyan
+                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE0FFFF' } };
             });
             reconciled2bData.forEach(row => {
                 const excelRow = row.map(cell => cell === undefined || cell === null ? '' : cell);
@@ -598,11 +651,10 @@
                 applyExcelRowColor(addedRow, row[0], gstr2bHeaders().length);
             });
 
-            // Client Data Sheet
             const ws2 = workbook.addWorksheet('Client Data');
             const headerRow2 = ws2.addRow(gstr3bHeaders());
             headerRow2.eachCell(cell => {
-                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE0FFFF' } }; // Light Cyan
+                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE0FFFF' } };
             });
             reconciled3bData.forEach(row => {
                 const excelRow = row.map(cell => cell === undefined || cell === null ? '' : cell);
@@ -610,7 +662,6 @@
                 applyExcelRowColor(addedRow, row[0], gstr3bHeaders().length);
             });
 
-            // Summary Sheet
             const ws3 = workbook.addWorksheet('Summary');
             const summaryHeader1 = ws3.addRow(['Particulars', 'GST Portal', '', '', '', 'Client Data', '', '', '']);
             const summaryHeader2 = ws3.addRow(['', 'Taxable Value', 'IGST', 'CGST', 'SGST', 'Taxable Value', 'IGST', 'CGST', 'SGST']);
@@ -619,22 +670,18 @@
             ws3.mergeCells('F1:I1');
             [summaryHeader1, summaryHeader2].forEach(row => {
                 row.eachCell(cell => {
-                    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE0FFFF' } }; // Light Cyan
+                    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE0FFFF' } };
                 });
             });
 
             const gstr2bSummary = calculateSummary(reconciled2bData, false);
             const gstr3bSummary = calculateSummary(reconciled3bData, true);
             const criteria = [
-                'GSTN, Invoice No. & Date',
-                'Invoice Number',
-                'GSTN & Date',
-                'GSTN',
-                'GSTN-Not Match',
-                'Not match any creteria'
+                'GSTN, Invoice No. & Date', 'Invoice Number', 'GSTN & Date', 
+                'GSTN', 'GSTN-Not Match', 'Not match any creteria'
             ];
 
-            criteria.forEach((criterion, index) => {
+            criteria.forEach(criterion => {
                 ws3.addRow([
                     criterion,
                     gstr2bSummary.summary[criterion].taxable,
@@ -663,7 +710,6 @@
                 cell.font = { bold: true };
             });
 
-            // Generate and download
             const buffer = await workbook.xlsx.writeBuffer();
             const blob = new Blob([buffer], { type: 'application/octet-stream' });
             const url = URL.createObjectURL(blob);
@@ -675,14 +721,14 @@
 
         function applyExcelRowColor(row, match, columnCount) {
             const colors = {
-                'GSTN, Invoice No. & Date': 'FF00CED1', // Teal #00ced1
-                'Invoice Number': 'FF4B0082',          // Indigo #4b0082
-                'GSTN & Date': 'FF32CD32',             // Lime Green #32cd32
-                'GSTN': 'FFFFBF00',                    // Amber #ffbf00
-                'GSTN-Not Match': 'FFDC143C',          // Crimson #dc143c
-                'Not match any creteria': 'FFFF00FF'   // Magenta #ff00ff
+                'GSTN, Invoice No. & Date': 'FF00CED1', // Teal
+                'Invoice Number': 'FF4B0082',          // Indigo
+                'GSTN & Date': 'FF32CD32',             // Lime Green
+                'GSTN': 'FFFFBF00',                    // Amber
+                'GSTN-Not Match': 'FFDC143C',          // Crimson
+                'Not match any creteria': 'FFFF00FF'   // Magenta
             };
-            const color = colors[match] || 'FFFF00FF'; // Default to Magenta
+            const color = colors[match] || 'FFFF00FF';
             for (let i = 1; i <= columnCount; i++) {
                 const cell = row.getCell(i);
                 cell.fill = {
@@ -691,7 +737,7 @@
                     fgColor: { argb: color }
                 };
                 if (['GSTN, Invoice No. & Date', 'Invoice Number', 'GSTN & Date', 'GSTN-Not Match', 'Not match any creteria'].includes(match)) {
-                    cell.font = { color: { argb: 'FFFFFFFF' } }; // White text for dark backgrounds
+                    cell.font = { color: { argb: 'FFFFFFFF' } };
                 }
             }
         }
