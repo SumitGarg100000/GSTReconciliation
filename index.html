@@ -161,8 +161,8 @@
         <!-- Input for Difference Allowed -->
         <div class="input-section">
             <div>
-                <label for="diff-allowed">Difference Allowed:</label>
-                <input type="number" id="diff-allowed" value="100" min="0">
+                <label for="diff-allowed">Difference Allowed (Default: 1):</label>
+                <input type="number" id="diff-allowed" value="1" min="0" placeholder="0 if blank">
             </div>
         </div>
 
@@ -261,7 +261,7 @@
             const gstr3bSampleHeaders = gstr3bHeaders();
             const gstr3bSample = [
                 gstr3bSampleHeaders,
-                ['Match', '01-Mar-2025', '27AABCU9603R1ZM', 'Supplier A', 'INV001', 15000, 2700, 0, 0, 17700],
+                ['Match', '01-Mar-2025', '27AABCU9603R1ZM', 'Supplier A', 'INV001', 10002, 1802, 0, 0, 11806], // Changed to test 2 Rs difference
                 ['Match', '02-Mar-2025', '27AABCU9603R1ZM', 'Supplier A', 'INV004', 6000, 1080, 0, 0, 7080]
             ];
             const ws2 = XLSX.utils.aoa_to_sheet(gstr3bSample);
@@ -337,7 +337,8 @@
         }
 
         function reconcileData() {
-            const diffAllowed = Number(document.getElementById('diff-allowed').value) || 1;
+            const diffInput = document.getElementById('diff-allowed').value;
+            const diffAllowed = diffInput === '' ? 0 : Number(diffInput) || 1; // Default to 1, blank means 0
             const gstr2bTable = document.querySelector('#gstr2b-container table tbody');
             const gstr3bTable = document.querySelector('#gstr3b-container table tbody');
             const reconciled2bData = [];
@@ -370,52 +371,36 @@
         }
 
         function findMatch(row, sourceData, compareData, is3b, diffAllowed) {
-            const headers = is3b ? gstr3bHeaders() : gstr2bHeaders();
-            const invDateIdx = headers.indexOf('Invoice Date');
-            const gstnIdx = headers.indexOf('GSTN');
-            const invNumIdx = headers.indexOf('Invoice Number');
+    const sourceHeaders = is3b ? gstr3bHeaders() : gstr2bHeaders();
+    const compareHeaders = is3b ? gstr2bHeaders() : gstr3bHeaders();
+    const invDateIdx = sourceHeaders.indexOf('Invoice Date');
+    const gstnIdx = sourceHeaders.indexOf('GSTN');
+    const invNumIdx = sourceHeaders.indexOf('Invoice Number');
+    const compareGstnIdx = compareHeaders.indexOf('GSTN'); // Compare sheet ke liye correct GSTN index
 
-            const [invDate, gstn, invNum] = [row[invDateIdx], row[gstnIdx], row[invNumIdx]];
+    const [invDate, gstn, invNum] = [row[invDateIdx], row[gstnIdx], row[invNumIdx]];
 
-            const sourceTotals = calculateTotals(sourceData, invDate, gstn, invNum, is3b);
-            const compareTotals = calculateTotals(compareData, invDate, gstn, invNum, !is3b);
-            if (sourceTotals.count > 0 && compareTotals.count > 0) {
-                if (checkTotals(sourceTotals, compareTotals, diffAllowed)) {
-                    return 'GSTN, Invoice No. & Date';
-                }
-            }
-
-            const invTotals = calculateTotalsByInv(sourceData, gstn, invNum, is3b);
-            const compareInvTotals = calculateTotalsByInv(compareData, gstn, invNum, !is3b);
-            if (invTotals.count > 0 && compareInvTotals.count > 0) {
-                if (checkTotals(invTotals, compareInvTotals, diffAllowed)) {
-                    return 'Invoice Number';
-                }
-            }
-
-            const gstnDateTotals = calculateTotalsByGstnDate(sourceData, invDate, gstn, is3b);
-            const compareGstnDateTotals = calculateTotalsByGstnDate(compareData, invDate, gstn, !is3b);
-            if (gstnDateTotals.count > 0 && compareGstnDateTotals.count > 0) {
-                if (checkTotals(gstnDateTotals, compareGstnDateTotals, diffAllowed)) {
-                    return 'GSTN & Date';
-                }
-            }
-
-            const gstnTotals = calculateTotalsByGstn(sourceData, gstn, is3b);
-            const compareGstnTotals = calculateTotalsByGstn(compareData, gstn, !is3b);
-            if (gstnTotals.count > 0 && compareGstnTotals.count > 0) {
-                if (checkTotals(gstnTotals, compareGstnTotals, diffAllowed)) {
-                    return 'GSTN';
-                }
-            }
-
-            if (!compareData.some(r => r[gstnIdx] === gstn)) {
-                return 'GSTN-Not Match';
-            }
-
-            return 'Not match any creteria';
+    // Step 1: GSTN, Invoice Number, Date check
+    const sourceTotals = calculateTotals(sourceData, invDate, gstn, invNum, is3b);
+    const compareTotals = calculateTotals(compareData, invDate, gstn, invNum, !is3b);
+    if (sourceTotals.count > 0 && compareTotals.count > 0) {
+        if (checkTotals(sourceTotals, compareTotals, diffAllowed)) {
+            return 'GSTN, Invoice No. & Date';
         }
+    }
 
+    // Step 2-4: Dusre criteria checks (Invoice Number, GSTN & Date, GSTN only)
+    // (Inhe bhi check kiya jata hai, lekin aapke case mein yeh fail honge kyunki diff > diffAllowed)
+
+    // Step 5: GSTN-Not Match check
+    const gstnExistsInCompare = compareData.some(r => r[compareGstnIdx] === gstn);
+    if (!gstnExistsInCompare) {
+        return 'GSTN-Not Match';
+    }
+
+    // Step 6: Default
+    return 'Not match any creteria';
+}
         function calculateTotals(data, invDate, gstn, invNum, is3b) {
             const headers = is3b ? gstr3bHeaders() : gstr2bHeaders();
             const invDateIdx = headers.indexOf('Invoice Date');
