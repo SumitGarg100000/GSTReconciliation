@@ -1,10 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GST Reconciliation Tool</title>
+    <meta name="description" content="Fully updated free income tax calculator for FY 2024-25(AY 2025-26). Calculate tax liability instantly under both old and new regimes with comparison.">
+    <meta name="keywords" content="income tax calculator FY 2024-25, income tax calculator AY 2025-26, tax calculator AY 2025-26, tax calculation, Sumit Garg tax calculator, sumit garg income tax calculator ay 2025-26, sumit tax calculator fy 2024-25">
+    <!-- Allow indexing and link following (default behavior) -->
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta property="og:title" content="Income Tax Calculator FY 2024-25">
+    <!-- Open Graph (Facebook/WhatsApp/LinkedIn) -->
+    <meta property="og:image" content="https://sumitgarg100000.github.io/IncometaxCalculator/Image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Income Tax Calculator 2023-24 Preview">
+    <meta name="google-site-verification" content="FR7D2qkpciz6QmllRnOJ7Mv6bbsFJ1CA6Qn7mYDkqwE" />
+    <title>Income tax calculator</title>
+    <!-- Add Font Awesome for WhatsApp icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+      /* WhatsApp button styles */
+      .whatsapp-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #25d366;
+        color: white;
+        border-radius: 50%;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 0 20px 10px rgba(37, 211, 102, 0.1);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        width: 100px;
+        height: 100px;
+        animation: glow 3s infinite;
+        transition: all 0.3s ease;
+      }
 
+      /* Hover effect */
+      .whatsapp-btn:hover {
+        background-color: #128C7E;
+        transform: scale(1.1);
+        animation-play-state: paused;
+      }
+
+      /* WhatsApp icon */
+      .whatsapp-btn i {
+        font-size: 60px;
+        transition: transform 0.3s ease;
+      }
+
+      /* Glowing animation */
+      @keyframes glow {
+        0% {
+          box-shadow: 0 0 20px 0px rgba(37, 211, 102, 0.2);
+          transform: scale(1);
+        }
+
+        50% {
+          box-shadow: 0 0 40px 20px rgba(37, 211, 102, 0.1);
+          transform: scale(1.05);
+        }
+
+        100% {
+          box-shadow: 0 0 20px 0px rgba(37, 211, 102, 0.2);
+          transform: scale(1);
+        }
+      }
+
+      /* Additional sparkle effect */
+      .whatsapp-btn::after {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(37, 211, 102, 0.15) 0%, rgba(37, 211, 102, 0) 70%);
+        animation: sparkle 3s infinite;
+      }
+
+      @keyframes sparkle {
+        0% {
+          opacity: 0.3;
+          transform: scale(0.8);
+        }
+
+        50% {
+          opacity: 0;
+          transform: scale(1.5);
+        }
+
+        100% {
+          opacity: 0.3;
+          transform: scale(0.8);
+        }
+      }
+    </style>
+    
 <style>
     /* Simple CSS Reset */
     * {
@@ -191,8 +289,70 @@
     }
 </style>
     
-</head>
-<body>
+    
+    <style>
+
+footer {
+  background: var(--primary-color);
+  color: var(--text-light);
+  padding: 1rem;
+  width: 100%;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--text-light);
+  text-decoration: none;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.footer-links a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* Responsive Design for Tablets and Smaller Screens */
+@media (max-width: 768px) {
+  footer {
+    padding: 0.75rem;
+  }
+
+  .footer-links {
+    gap: 1.5rem;
+  }
+}
+
+/* Responsive Design for Mobile Devices */
+@media (max-width: 480px) {
+  .footer-links {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+    </style>
+
+  </head>
+  <body>
+
+
+
+
+
     <div class="container">
         <h1>GST Reconciliation Tool</h1>
         
@@ -783,5 +943,33 @@
             }
         }
     </script>
-</body>
+
+
+
+
+
+
+
+
+
+
+  
+    <!-- WhatsApp button -->
+    <a href="https://wa.me/9716804520" class="whatsapp-btn" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+  </body>
+  <footer>
+    <div class="footer-links">
+      <a href="#">📞 Ph : 9716804520</a>
+      <a href="#">✉️ Email: Sumitgarg100000@gmail.com</a>
+      </a>
+      <a href="#">📍 Address: Rohini, Delhi-110086</a>
+    </div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#"></a>
+    </div>
+  </footer>
 </html>
