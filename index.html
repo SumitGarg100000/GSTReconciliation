@@ -96,14 +96,14 @@
     table {
         width: 100%;
         border-collapse: collapse;
-        font-size:14px;
+        font-size: 14px; /* Base font size for tables */
     }
 
     th, td {
         border: 1px solid #cfd8dc;
         padding: 12px;
         text-align: left;
-        font-size:1em;
+        font-size: 14px; /* Base font size for all cells */
     }
 
     th {
@@ -151,6 +151,20 @@
     .gstn-not-match { background-color: #dc143c; color: white; } /* Crimson */
     .no-match { background-color: #ff00ff; color: white; } /* Magenta */
 
+    /* Default font size for contenteditable fields and summary container (Desktop view) */
+    [contenteditable="true"],
+    [contenteditable="true"] * {
+        font-size: 9px !important; /* 9px for desktop */
+    }
+
+    #summary-container table th,
+    #summary-container table td,
+    #summary-container table th *,
+    #summary-container table td * {
+        font-size: 9px !important; /* 9px for desktop */
+    }
+
+    /* Media query for mobile view (≤ 768px) */
     @media (max-width: 768px) {
         .upload-section, .input-section {
             flex-direction: column;
@@ -161,9 +175,21 @@
         h1 {
             font-size: 2em;
         }
+
+        /* Override font size for contenteditable fields and summary container in mobile view */
+        [contenteditable="true"],
+        [contenteditable="true"] * {
+            font-size: 14px !important; /* 14px for mobile */
+        }
+
+        #summary-container table th,
+        #summary-container table td,
+        #summary-container table th *,
+        #summary-container table td * {
+            font-size: 14px !important; /* 14px for mobile */
+        }
     }
 </style>
-
     
 </head>
 <body>
