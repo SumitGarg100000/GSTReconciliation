@@ -102,7 +102,9 @@
         }
       }
     </style>
-    
+
+
+
 <style>
     /* Simple CSS Reset */
     * {
@@ -117,7 +119,7 @@
         font-family: 'Segoe UI', Arial, sans-serif;
         margin: 0;
         padding: 30px;
-        background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+        background: #F8F9FA; /* Matching the body background from new CSS */
         color: #333;
     }
 
@@ -170,7 +172,7 @@
         border-radius: 5px;
         background: #f1f8e9;
         transition: border-color 0.3s;
-        font-size: 1em; /* Ensure the font size matches the rest of the content */
+        font-size: 1em;
     }
 
     input[type="file"]:hover, input[type="number"]:hover {
@@ -194,18 +196,18 @@
     table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 14px; /* Base font size for tables */
+        font-size: 14px;
     }
 
     th, td {
         border: 1px solid #cfd8dc;
         padding: 12px;
         text-align: left;
-        font-size: 14px; /* Base font size for all cells */
+        font-size: 14px;
     }
 
     th {
-        background: #e0ffff; /* Light Cyan for headings */
+        background: #e0ffff;
         color: #004d40;
         font-weight: bold;
     }
@@ -242,27 +244,60 @@
         color: #004d40;
     }
 
-    .match-gstn-inv-date { background-color: #00ced1; color: white; } /* Teal */
-    .match-inv { background-color: #4b0082; color: white; } /* Indigo */
-    .match-gstn-date { background-color: #32cd32; color: white; } /* Lime Green */
-    .match-gstn { background-color: #ffbf00; } /* Amber */
-    .gstn-not-match { background-color: #dc143c; color: white; } /* Crimson */
-    .no-match { background-color: #ff00ff; color: white; } /* Magenta */
+    .match-gstn-inv-date { background-color: #00ced1; color: white; }
+    .match-inv { background-color: #4b0082; color: white; }
+    .match-gstn-date { background-color: #32cd32; color: white; }
+    .match-gstn { background-color: #ffbf00; }
+    .gstn-not-match { background-color: #dc143c; color: white; }
+    .no-match { background-color: #ff00ff; color: white; }
 
-    /* Default font size for contenteditable fields and summary container (Desktop view) */
     [contenteditable="true"],
     [contenteditable="true"] * {
-        font-size: 9px !important; /* 9px for desktop */
+        font-size: 9px !important;
     }
 
     #summary-container table th,
     #summary-container table td,
     #summary-container table th *,
     #summary-container table td * {
-        font-size: 9px !important; /* 9px for desktop */
+        font-size: 9px !important;
     }
 
-    /* Media query for mobile view (≤ 768px) */
+    /* Footer Styles */
+    footer {
+        background: #2C3E50; /* Matching footer color from new CSS */
+        color: #FFFFFF; /* Using --text-light from new CSS for contrast */
+        padding: 1rem;
+        width: 100%;
+    }
+
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin: 1rem 0;
+        flex-wrap: wrap;
+    }
+
+    .footer-links a {
+        color: #FFFFFF; /* Matching --text-light from new CSS */
+        text-decoration: none;
+        opacity: 0.9;
+        transition: opacity 0.3s ease;
+    }
+
+    .footer-links a:hover {
+        opacity: 1;
+        text-decoration: underline;
+    }
+
+    /* Responsive Design for Tablets and Smaller Screens */
     @media (max-width: 768px) {
         .upload-section, .input-section {
             flex-direction: column;
@@ -273,78 +308,34 @@
         h1 {
             font-size: 2em;
         }
-
-        /* Override font size for contenteditable fields and summary container in mobile view */
         [contenteditable="true"],
         [contenteditable="true"] * {
-            font-size: 14px !important; /* 14px for mobile */
+            font-size: 14px !important;
         }
-
         #summary-container table th,
         #summary-container table td,
         #summary-container table th *,
         #summary-container table td * {
-            font-size: 14px !important; /* 14px for mobile */
+            font-size: 14px !important;
+        }
+        footer {
+            padding: 0.75rem;
+        }
+        .footer-links {
+            gap: 1.5rem;
+        }
+    }
+
+    /* Responsive Design for Mobile Devices */
+    @media (max-width: 480px) {
+        .footer-links {
+            flex-direction: column;
+            gap: 0.5rem;
         }
     }
 </style>
-    
-    
-    <style>
 
-footer {
-  background: var(--primary-color);
-  color: var(--text-light);
-  padding: 1rem;
-  width: 100%;
-}
 
-.footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.footer-links {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin: 1rem 0;
-  flex-wrap: wrap;
-}
-
-.footer-links a {
-  color: var(--text-light);
-  text-decoration: none;
-  opacity: 0.9;
-  transition: opacity 0.3s ease;
-}
-
-.footer-links a:hover {
-  opacity: 1;
-  text-decoration: underline;
-}
-
-/* Responsive Design for Tablets and Smaller Screens */
-@media (max-width: 768px) {
-  footer {
-    padding: 0.75rem;
-  }
-
-  .footer-links {
-    gap: 1.5rem;
-  }
-}
-
-/* Responsive Design for Mobile Devices */
-@media (max-width: 480px) {
-  .footer-links {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-}
-
-    </style>
 
   </head>
   <body>
