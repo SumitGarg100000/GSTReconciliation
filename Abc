@@ -363,6 +363,10 @@ footer-links a:hover {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
     <script>
+
+      // if (window.location.href === "https://sumitgarg100000.github.io/GSTReconciliation/") {
+     
+
       let gstr2bData = [];
       let gstr3bData = [];
       const detailedReconciliationCheckbox = document.getElementById('detailed-reconciliation');
@@ -908,6 +912,11 @@ footer-links a:hover {
           }
         }
       }
+
+
+//  }   else      {       alert("Don't waste your time for copying. This file is fully secured by Sumit Garg. If any query, Contact - Sumit Garg, Ph. No. - 9716804520, Email - SumitGarg100000@Gmail.com ");     }
+
+
     </script>
     <script>
       function showInstructions() {
