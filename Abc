@@ -573,7 +573,7 @@ footer-links a:hover {
           if (!gstnExistsInCompare) {
             return 'Unmatch - GSTN Not Exist';
           }
-          return 'Unmatch - Amt Diff';
+          return 'Unmatch';
         } else {
           const sourceTotals = calculateTotals(sourceData, invDate, gstn, invNum, is3b);
           const compareTotals = calculateTotals(compareData, invDate, gstn, invNum, !is3b);
@@ -607,7 +607,7 @@ footer-links a:hover {
           if (!gstnExistsInCompare) {
             return 'Unmatch - GSTN Not Exist';
           }
-          return 'Unmatch - Amt Diff';
+          return 'Unmatch';
         }
       }
 
@@ -733,8 +733,8 @@ footer-links a:hover {
         const cgstIdx = headers.indexOf('CGST');
         const sgstIdx = headers.indexOf('SGST');
         const criteria = detailedReconciliationCheckbox.checked ?
-          ['Match - GSTN, Invoice No., Date', 'Match - GSTN, Invoice No.', 'Match - GSTN, Date', 'Match - GSTN', 'Unmatch - GSTN Not Exist', 'Unmatch - Amt Diff'] :
-          ['Match', 'Unmatch - GSTN Not Exist', 'Unmatch - Amt Diff'];
+          ['Match - GSTN, Invoice No., Date', 'Match - GSTN, Invoice No.', 'Match - GSTN, Date', 'Match - GSTN', 'Unmatch - GSTN Not Exist', 'Unmatch'] :
+          ['Match', 'Unmatch - GSTN Not Exist', 'Unmatch'];
         const summary = {};
         criteria.forEach(criterion => {
           summary[criterion] = { taxable: 0, igst: 0, cgst: 0, sgst: 0 };
@@ -777,8 +777,8 @@ footer-links a:hover {
         });
         html += '</tr></thead><tbody>';
         const criteria = detailedReconciliationCheckbox.checked ?
-          ['Match - GSTN, Invoice No., Date', 'Match - GSTN, Invoice No.', 'Match - GSTN, Date', 'Match - GSTN', 'Unmatch - GSTN Not Exist', 'Unmatch - Amt Diff'] :
-          ['Match', 'Unmatch - GSTN Not Exist', 'Unmatch - Amt Diff'];
+          ['Match - GSTN, Invoice No., Date', 'Match - GSTN, Invoice No.', 'Match - GSTN, Date', 'Match - GSTN', 'Unmatch - GSTN Not Exist', 'Unmatch'] :
+          ['Match', 'Unmatch - GSTN Not Exist', 'Unmatch'];
         criteria.forEach(criterion => {
           html += '<tr>';
           html += `<td>${criterion}</td>`;
@@ -843,8 +843,8 @@ footer-links a:hover {
         const gstr2bSummary = calculateSummary(reconciled2bData, false);
         const gstr3bSummary = calculateSummary(reconciled3bData, true);
         const criteria = detailedReconciliationCheckbox.checked ?
-          ['Match - GSTN, Invoice No., Date', 'Match - GSTN, Invoice No.', 'Match - GSTN, Date', 'Match - GSTN', 'Unmatch - GSTN Not Exist', 'Unmatch - Amt Diff'] :
-          ['Match', 'Unmatch - GSTN Not Exist', 'Unmatch - Amt Diff'];
+          ['Match - GSTN, Invoice No., Date', 'Match - GSTN, Invoice No.', 'Match - GSTN, Date', 'Match - GSTN', 'Unmatch - GSTN Not Exist', 'Unmatch'] :
+          ['Match', 'Unmatch - GSTN Not Exist', 'Unmatch'];
         criteria.forEach(criterion => {
           ws3.addRow([
             criterion,
@@ -886,11 +886,11 @@ footer-links a:hover {
           'Match - GSTN, Date': 'FF32CD32',
           'Match - GSTN': 'FFFFBF00',
           'Unmatch - GSTN Not Exist': 'FFDC143C',
-          'Unmatch - Amt Diff': 'FFFF00FF'
+          'Unmatch': 'FFFF00FF'
         } : {
           'Match': 'FF00CED1',
           'Unmatch - GSTN Not Exist': 'FFDC143C',
-          'Unmatch - Amt Diff': 'FFFF00FF'
+          'Unmatch': 'FFFF00FF'
         };
         const color = colors[match] || 'FFFF00FF';
         for (let i = 1; i <= columnCount; i++) {
@@ -901,9 +901,9 @@ footer-links a:hover {
             fgColor: { argb: color }
           };
           if ((detailedReconciliationCheckbox.checked && 
-              ['Match - GSTN, Invoice No., Date', 'Match - GSTN, Invoice No.', 'Match - GSTN, Date', 'Match - GSTN', 'Unmatch - GSTN Not Exist', 'Unmatch - Amt Diff'].includes(match)) ||
+              ['Match - GSTN, Invoice No., Date', 'Match - GSTN, Invoice No.', 'Match - GSTN, Date', 'Match - GSTN', 'Unmatch - GSTN Not Exist', 'Unmatch'].includes(match)) ||
               (!detailedReconciliationCheckbox.checked && 
-              ['Match', 'Unmatch - GSTN Not Exist', 'Unmatch - Amt Diff'].includes(match))) {
+              ['Match', 'Unmatch - GSTN Not Exist', 'Unmatch'].includes(match))) {
             cell.font = { color: { argb: 'FFFFFFFF' } };
           }
         }
@@ -931,7 +931,7 @@ footer-links a:hover {
     </a>
     <div id="instructions-modal" class="modal">
       <div class="modal-content">
-        <span class="close-btn" onclick="hideInstructions()">×</span>
+        <span class="close-btn" onclick="hideInstructions()">Ã—</span>
         <h2>GST Reconciliation Tool</h2>
         <h3>How to Use the Tool</h3>
         <ol>
@@ -954,13 +954,13 @@ footer-links a:hover {
           <li><strong>Match - GSTN, Date</strong> - Matches based on GSTN and Date.</li>
           <li><strong>Match - GSTN</strong> - Matches based on GSTN only.</li>
           <li><strong>Unmatch - GSTN Not Exist</strong> - GSTN not found in other sheet.</li>
-          <li><strong>Unmatch - Amt Diff</strong> - Amount difference found.</li>
+          <li><strong>Unmatch</strong> - Amount difference found.</li>
         </ol>
         <p><strong>When Detailed Reconciliation is unchecked:</strong></p>
         <ol>
           <li><strong>Match</strong> - Any of the above match conditions met.</li>
           <li><strong>Unmatch - GSTN Not Exist</strong> - GSTN not found in other sheet.</li>
-          <li><strong>Unmatch - Amt Diff</strong> - Amount difference found.</li>
+          <li><strong>Unmatch</strong> - Amount difference found.</li>
         </ol>
       </div>
     </div>
@@ -969,11 +969,13 @@ footer-links a:hover {
     <div class="footer-links">
       <a href="#">📞 Ph : 9716804520</a>
       <a href="#">✉️ Email: Sumitgarg100000@gmail.com</a>
+      </a>
       <a href="#">📍 Address: Rohini, Delhi-110086</a>
     </div>
     <div class="footer-links">
       <a href="#">Privacy Policy</a>
       <a href="#">Terms of Service</a>
+      <a href="#"></a>
     </div>
   </footer>
 </html>
