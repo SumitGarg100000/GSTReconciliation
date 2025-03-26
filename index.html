@@ -411,31 +411,31 @@
     
     
 
+<script>
+    function loadExternalScript(url) {
+    return fetch(url)
+        .then(response => {
+            if (!response.ok) throw new Error(`Failed to fetch script from ${url}`);
+            return response.text();
+        })
+        .then(scriptText => {
+            const scriptElement = document.createElement('script');
+            scriptElement.text = scriptText;
+            document.body.appendChild(scriptElement);
+        })
+        .catch(error => {
+            document.querySelector('.container').innerHTML = '<h1>Failed to load tool! Contact Sumit Garg at 9716804520.</h1>';
+            console.error('Error:', error);
+        });
+}
 
-    <script>
-        const scriptUrl = 'https://raw.githubusercontent.com/SumitGarg100000/GSTReconciliation/refs/heads/main/script.js';
-        const scriptUrl = 'https://raw.githubusercontent.com/SumitGarg100000/GSTReconciliation/refs/heads/main/password.js';
-        function loadExternalScript() {
-            fetch(scriptUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error('Failed to fetch script');
-                    return response.text();
-                })
-                .then(scriptText => {
-                    const scriptElement = document.createElement('script');
-                    scriptElement.text = scriptText;
-                    document.body.appendChild(scriptElement);
-                })
-                .catch(error => {
-                    document.querySelector('.container').innerHTML = '<h1>Failed to load tool! Contact Sumit Garg at 9716804520.</h1>';
-                    console.error('Error:', error);
-                });
-        }
+document.addEventListener('DOMContentLoaded', () => {
+    const scriptUrl1 = 'https://raw.githubusercontent.com/SumitGarg100000/GSTReconciliation/refs/heads/main/script.js';
+    const scriptUrl2 = 'https://raw.githubusercontent.com/SumitGarg100000/GSTReconciliation/refs/heads/main/password.js';
+    loadExternalScript(scriptUrl1).then(() => loadExternalScript(scriptUrl2));
+});
 
-        document.addEventListener('DOMContentLoaded', loadExternalScript);
-    </script>
-
-
+</script>
 
     
     
