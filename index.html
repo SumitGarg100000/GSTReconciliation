@@ -16,6 +16,24 @@
     <title>GST Reconciliation</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+
+      .explanation {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.explanation h2, .explanation h3 {
+  color: #00796b;
+}
+
+.explanation ul, .explanation ol {
+  margin-left: 20px;
+}
+
+      
       .whatsapp-btn {
         position: fixed;
         bottom: 20px;
@@ -452,6 +470,61 @@
         </div>
         <button onclick="login()">Login</button>
         <p id="error"></p>
+
+
+<div class="explanation">
+  <h2>How to Use the GST Reconciliation Tool</h2>
+  <p>The GST Reconciliation Tool is designed to help you easily compare and match your GST data from GSTR-2B and GSTR-3B. This guide will walk you through the process step by step.</p>
+  
+  <h3>Step-by-Step Guide</h3>
+  <ol>
+    <li><strong>Log in</strong>: Use your username and password to access the tool.</li>
+    <li><strong>Download Sample File</strong>: Click on "Download Sample Excel File" to get a template for your data.</li>
+    <li><strong>Prepare Your Data</strong>: Enter your GSTR-2B data in GST Portal sheet and GSTR-3B or books in client data sheet according to the sample file.</li>
+    <li><strong>Upload File</strong>: Upload your prepared Excel file using the "Upload GST Data File" option.</li>
+    <li><strong>Set Difference Allowed</strong>: Adjust the tolerance for differences in amounts (default is 1).</li>
+    <li><strong>Enable Detailed Reconciliation</strong>: Check this box for detailed reconciliation or leave unchecked for a simple simple reconciliation.</li>
+    <li><strong>Enable Filters (Optional)</strong>: Use filters to sort or search through your data.</li>
+    <li><strong>Reconcile Data</strong>: Click "Reconcile" to process and match your data.</li>
+    <li><strong>Review Results</strong>: Check the GSTR-2B, GSTR-3B, and Summary tables for matched data.</li>
+    <li><strong>Edit Data (If Needed)</strong>: Make direct edits in the tables and reconcile again.</li>
+    <li><strong>Download Output</strong>: Click "Download Reconciled Data" to save the results.</li>
+  </ol>
+  
+  <h3>Feature Descriptions</h3>
+  <ul>
+    <li><strong>Login System</strong>: Secure access with username and password. Subscription status is verified upon login.</li>
+    <li><strong>Sample File Download</strong>: Provides a template to ensure your data is correctly formatted.</li>
+    <li><strong>File Upload</strong>: Upload your GST data in Excel (.xlsx) format.</li>
+    <li><strong>Difference Allowed</strong>: Set the acceptable difference in taxable value, IGST, CGST, and SGST for matching (default: 1).</li>
+    <li><strong>Detailed Reconciliation</strong>: When enabled, shows detailed match criteria; when disabled, shows a simplified "Match" or "Unmatch".</li>
+    <li><strong>Enable Filters</strong>: Adds dropdown filters to table columns for easy data sorting and searching.</li>
+    <li><strong>Reconcile Button</strong>: Processes the data and updates the tables with match results.</li>
+    <li><strong>Reset Data Button</strong>: Clears all uploaded data and resets the tool.</li>
+    <li><strong>Editable Tables</strong>: Directly edit data in the tables; changes are reflected upon reconciling again.</li>
+    <li><strong>Download Reconciled Data</strong>: Generates an Excel file with matched data, including color-coded rows for clarity.</li>
+  </ul>
+  
+  <h3>Understanding Match Criteria</h3>
+  <p>When <strong>Detailed Reconciliation</strong> is enabled, the tool uses the following criteria:</p>
+  <ul>
+    <li><strong>Match - GSTN, Invoice No., Date</strong>: Exact match on GSTN, invoice number, and date.</li>
+    <li><strong>Match - GSTN, Invoice No.</strong>: Match on GSTN and invoice number, with possible date differences.</li>
+    <li><strong>Match - GSTN, Date</strong>: Match on GSTN and date, with possible invoice number differences.</li>
+    <li><strong>Match - GSTN</strong>: Match only on GSTN, with differences in invoice number and date.</li>
+    <li><strong>Unmatch - GSTN Not Exist</strong>: GSTN from one sheet is not found in the other.</li>
+    <li><strong>Unmatch</strong>: Data does not meet any match criteria or has significant amount differences.</li>
+  </ul>
+  <p>When <strong>Detailed Reconciliation</strong> is disabled, the criteria are simplified:</p>
+  <ul>
+    <li><strong>Match</strong>: Data matches based on any of the detailed criteria above.</li>
+    <li><strong>Unmatch - GSTN Not Exist</strong>: GSTN is not found in the other sheet.</li>
+    <li><strong>Unmatch</strong>: Data does not match or has significant amount differences.</li>
+  </ul>
+</div>
+
+
+        
       </div>
 
       <!-- Tool Section -->
