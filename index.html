@@ -17,12 +17,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
 
-      .explanation {
+#login-section {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Login section ko pura height do */
+}
+
+.explanation {
   margin-top: 20px;
   padding: 20px;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 5px;
+  overflow-y: auto; /* Scrollable banao agar content zyada ho */
+  max-height: calc(100vh - 300px); /* Screen height se login form aur padding subtract karo */
+  flex-grow: 1; /* Baki space ko fill kare */
 }
 
 .explanation h2, .explanation h3 {
@@ -472,7 +481,7 @@
         <p id="error"></p>
 
 
-<div class="explanation">
+<div class="explanation" id="explanation-container">
   <h2>How to Use the GST Reconciliation Tool</h2>
   <p>The GST Reconciliation Tool is designed to help you easily compare and match your GST data from GSTR-2B and GSTR-3B. This guide will walk you through the process step by step.</p>
   
