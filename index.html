@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
 
+
+
 #login-section {
   display: flex;
   flex-direction: column;
@@ -41,6 +43,8 @@
 .explanation ul, .explanation ol {
   margin-left: 20px;
 }
+
+
 
       
       .whatsapp-btn {
@@ -316,6 +320,7 @@
       }
       .match-gstn-inv-date, .match { background-color: #00ced1; color: white; }
       .match-inv { background-color: #4b0082; color: white; }
+      .amt-diff { background-color: #ff4500; color: white; } /* OrangeRed for Unmatch - Amt Diff */
       .match-gstn-date { background-color: #32cd32; color: white; }
       .match-gstn { background-color: #ffbf00; }
       .gstn-not-match { background-color: #dc143c; color: white; }
@@ -384,8 +389,9 @@
         .footer-links { flex-direction: column; gap: 0.5rem; }
       }
     </style>
-    <style>
-    /* Filter Dropdown Styles */
+   
+   <style>
+/* Existing Filter Dropdown Styles */
 .filter-dropdown {
   position: relative;
   display: inline-block;
@@ -418,49 +424,31 @@
   display: block;
 }
 
-.filter-input {
-  width: 100%;
-  padding: 5px;
-  border: none;
-  border-bottom: 1px solid #b0bec5;
-  outline: none;
-  font-size: 14px;
-}
-
-.filter-options {
-  padding: 5px;
-}
-
-.filter-option {
-  display: flex;
-  align-items: center;
-  padding: 3px 5px;
-}
-
-.filter-option input[type="checkbox"] {
-  margin-right: 5px;
-}
-
-.filter-actions {
+/* Sort Actions Styling */
+.sort-actions {
   padding: 5px;
   border-top: 1px solid #b0bec5;
+  display: flex;
+  justify-content: space-between;
 }
 
-.filter-actions button {
+.sort-actions button {
   background: #00796b;
   color: white;
   border: none;
   padding: 5px 10px;
-  margin: 0 5px;
+  margin: 0 2px;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 12px;
 }
 
-.filter-actions button:hover {
+.sort-actions button:hover {
   background: #004d40;
 }
-      
-    </style>
+</style>
+
+   
   </head>
   <body>
     <div class="container">
@@ -522,13 +510,14 @@
     <li><strong>Match - GSTN, Date</strong>: Match on GSTN and date, with possible invoice number differences.</li>
     <li><strong>Match - GSTN</strong>: Match only on GSTN, with differences in invoice number and date.</li>
     <li><strong>Unmatch - GSTN Not Exist</strong>: GSTN from one sheet is not found in the other.</li>
-    <li><strong>Unmatch</strong>: Data does not meet any match criteria or has significant amount differences.</li>
+    <li><strong>Unmatch - Amt Diff</strong>: Showing unmatch invoices due to amt difference</li>
+    <li><strong>Unmatch</strong>: Data does not meet any match criteria, generally due to extra invoices in either GSTR-2B or GSTR-3B/Books</li>
   </ul>
   <p>When <strong>Detailed Reconciliation</strong> is disabled, the criteria are simplified:</p>
   <ul>
     <li><strong>Match</strong>: Data matches based on any of the detailed criteria above.</li>
     <li><strong>Unmatch - GSTN Not Exist</strong>: GSTN is not found in the other sheet.</li>
-    <li><strong>Unmatch</strong>: Data does not match or has significant amount differences.</li>
+    <li><strong>Unmatch</strong>: Data does not meet any match criteria, generally due to extra invoices in either GSTR-2B or GSTR-3B/Books</li>
   </ul>
 </div>
 
@@ -583,9 +572,17 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+   <script>
+      
+      const users = {
+        "Sumitgarg" : { password: "Garg@123", expiry: "2026-04-30"},
+        "user1": { password: "pass123", expiry: "2025-04-30" },
+        "user2": { password: "pass456", expiry: "2025-05-15" }
+      };
+    </script>
     
+  
     
-
 <script>
     function loadExternalScript(url) {
     return fetch(url)
@@ -612,6 +609,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </script>
 
+
+
     
     
     <script>
@@ -637,7 +636,7 @@ document.addEventListener('DOMContentLoaded', () => {
     </a>
     <div id="instructions-modal" class="modal">
       <div class="modal-content">
-        <span class="close-btn" onclick="hideInstructions()">×</span>
+        <span class="close-btn" onclick="hideInstructions()"></span>
         <h2>GST Reconciliation Tool</h2>
         <h3>How to Use the Tool</h3>
         <ol>
@@ -660,13 +659,15 @@ document.addEventListener('DOMContentLoaded', () => {
           <li><strong>Match - GSTN, Date</strong> - Matches based on GSTN and Date.</li>
           <li><strong>Match - GSTN</strong> - Matches based on GSTN only.</li>
           <li><strong>Unmatch - GSTN Not Exist</strong> - GSTN not found in other sheet.</li>
-          <li><strong>Unmatch</strong> - Amount difference found.</li>
+          <li><strong>Unmatch - Amt Diff</strong> -Showing unmatch due to amt diff</li>
+          <li><strong>Unmatch</strong> - Other reasons, generally due to extra invoices in either GST-2B or GSTR-3B/Books</li>
         </ol>
         <p><strong>When Detailed Reconciliation is unchecked:</strong></p>
         <ol>
           <li><strong>Match</strong> - Any of the above match conditions met.</li>
           <li><strong>Unmatch - GSTN Not Exist</strong> - GSTN not found in other sheet.</li>
-          <li><strong>Unmatch</strong> - Amount difference found.</li>
+             <li><strong>Unmatch - Amt Diff</strong> -Showing unmatch due to amt diff</li>
+          <li><strong>Unmatch</strong> - Other reasons, generally due to extra invoices in either GST-2B or GSTR-3B/Books</li>
         </ol>
       </div>
     </div>
