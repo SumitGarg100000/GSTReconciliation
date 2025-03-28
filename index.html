@@ -277,13 +277,12 @@
         border: 1px solid #cfd8dc;
         padding: 12px;
         text-align: left;
-        font-size: 14px ! important;
+        font-size: 14px;
       }
       th {
         background: #e0ffff;
         color: #004d40;
         font-weight: bold;
-        font-size:14px ! important;
       }
       button {
         display: inline-block;
@@ -326,8 +325,12 @@
       .match-gstn { background-color: #ffbf00; }
       .gstn-not-match { background-color: #dc143c; color: white; }
       .no-match { background-color: #ff00ff; color: white; }
-      [contenteditable="true"], [contenteditable="true"] * {
-        font-size: 9px ! important;
+        [contenteditable="true"], [contenteditable="true"] * {
+        font-size: 9px !important;
+      }
+      #summary-container table th, #summary-container table td,
+      #summary-container table th *, #summary-container table td * {
+        font-size: 9px !important;
       }
       
       footer {
@@ -378,6 +381,8 @@
         .container { padding: 20px; }
         h1 { font-size: 2em; }
         [contenteditable="true"], [contenteditable="true"] * { font-size: 14px !important; }
+        #summary-container table th, #summary-container table td,
+        #summary-container table th *, #summary-container table td * { font-size: 14px !important; }
         footer { padding: 0.75rem; }
         .footer-links { gap: 1.5rem; }
       }
