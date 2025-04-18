@@ -346,7 +346,7 @@ Unmatch: Data does not meet any match criteria, generally due to extra invoices 
       #reset-btn:hover {
         background: linear-gradient(45deg, #cc0000, #ff4444);
       }
-      a#download-sample, a#download-output {
+      #download-sample, a#download-output {
         display: block;
         text-align: center;
         margin: 20px auto;
@@ -570,8 +570,14 @@ Unmatch: Data does not meet any match criteria, generally due to extra invoices 
       <!-- Tool Section -->
       <div id="tool-section" class="hidden">
         <h1>GST Reconciliation Tool</h1>
+
         <button onclick="logout()">Logout</button>
-        <a href="#" id="download-sample">Download Sample Excel File</a>
+<div class="button-style" style="display: flex; justify-content: center; gap: 10px; margin: 20px 0;">
+  <button id="download-sample">Download Sample Excel File</button>
+</div>
+
+        
+        
         <div class="input-section">
           <div>
             <label for="diff-allowed">Difference Allowed (Default: 1):</label>
