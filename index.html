@@ -931,50 +931,49 @@ tr:nth-child(even) td {
           </div>
 
 
-        <!-- New Email Section with Drop-Down Filter-->
-  <div class="email-section" style="background: #f0f8ff; padding: 15px; border-radius: 10px; border: 1px dashed #1a73e8; margin: 20px 0;">
-    <h3 class="text-lg font-bold mb-2">Email Reconciliation Results</h3>
-    <div class="flex flex-wrap gap-4" mb-4 items-center">
-      <div class="flex-1">
-        <label for="sender-email" class="block mb-2">Sender Email:</label>
-        <input type="email" id="sender-email" placeholder="Enter sender email" class="w-full" required>
-      </div>
-      <div class="flex-1">
-        <label for="receiver-email" class="block mb-2">Receiver Email:</label>
-        <input type="email" id="receiver-email" placeholder="Enter receiver email" class="w-full" required>
-      </div>
+        <!-- New Email Section with Drop-Down Filter -->
+<div class="email-section" style="background: #f0f8ff; padding: 15px; border-radius: 10px; border: 1px dashed #1a73e8; margin: 20px 0;">
+  <h3 class="text-lg font-bold mb-2">Email Reconciliation Results</h3>
+  <div class="flex flex-wrap gap-4 mb-4 items-center">
+    <div class="flex-1">
+      <label for="sender-email" class="block mb-2">Sender Email:</label>
+      <input type="email" id="sender-email" placeholder="Enter sender email" class="w-full" required>
     </div>
-
-<div class="flex items-center justify-center gap-4 flex-wrap">
-            <!-- Entry Filter Dropdown -->
-            <div class="custom-select">
-              <label for="entry-filter" class="block mb-2">Filter Entries:</label>
-              <select id="entry-filter">
-                <option value="all">All Entries</option>
-                <option value="match">Match Only</option>
-                <option value="unmatch">Unmatch Only</option>
-              </select>
-            </div>
-  <!-- Send Email Button -->
-    
-    
-
-      
-      <button id="send-email-btn" style="background: linear-gradient(145deg, #ff9800, #f57c00); color: white;">
-        <i class="fas fa-envelope"></i> Send Email
-      </button>
-  <!-- Export Format Dropdown -->
-            <div class="custom-select">
-              <label for="export-format" class="block mb-2">Export Format:</label>
-              <select id="export-format">
-                <option value="excel">Excel</option>
-                <option value="pdf">PDF</option>
-                <option value="both">Both</option>
-              </select>
-            </div>
+    <div class="flex-1">
+      <label for="receiver-email" class="block mb-2">Receiver Email:</label>
+      <input type="email" id="receiver-email" placeholder="Enter receiver email" class="w-full" required>
     </div>
-    <p id="email-error" class="text-red-600 text-center mt-2 hidden"></p>
   </div>
+
+  <div class="flex items-center justify-center gap-4 flex-wrap">
+    <!-- Entry Filter Dropdown -->
+    <div class="custom-select">
+      <label for="entry-filter" class="block mb-2">Filter Entries:</label>
+      <select id="entry-filter">
+        <option value="all">All Entries</option>
+        <option value="match">Match Only</option>
+        <option value="unmatch">Unmatch Only</option>
+      </select>
+    </div>
+    <!-- Send Email Button -->
+    <button id="send-email-btn" style="background: linear-gradient(145deg, #ff9800, #f57c00); color: white; margin-top: 25px;">
+      <i class="fas fa-envelope"></i> Send Email
+    </button>
+    <!-- Export Format Dropdown -->
+    <div class="custom-select">
+      <label for="export-format" class="block mb-2">Export Format:</label>
+      <select id="export-format">
+        <option value="excel">Excel</option>
+        <option value="pdf">PDF</option>
+        <option value="both">Both</option>
+      </select>
+    </div>
+  </div>
+  <p id="email-error" class="text-red-600 text-center mt-2 hidden"></p>
+  <p style="color: red; text-align: center; margin-top: 10px;">
+    Email function is pending due to ongoing improvements and suggestions.
+  </p>
+</div>
 
 
 
