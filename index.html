@@ -257,17 +257,7 @@ Unmatch: Data does not meet any match criteria, generally due to extra invoices 
   flex-direction: column;
 }
 
-.login-card {
-  max-width: 95%; /* Increased width for desktop */
-  width: 800px; /* Wider for desktop */
-  margin: 10px auto; /* Reduced margin for compact look */
-  background: white;
-  padding: 20px; /* Reduced padding */
-  border-radius: 10px;
-  box-shadow: 0 8px 20px rgba(0, 61, 115, 0.1);
-  flex-grow: 1;
-  overflow-y: auto; /* Scroll within login card */
-}
+
 
 
 #login-section {
@@ -950,11 +940,7 @@ tr:nth-child(even) td {
     padding: 15px;
   }
 
-  .login-card {
-    max-width: 90%;
-    width: 100%; /* Responsive width on mobile */
-    padding: 15px;
-  }
+
 
         
         h1 {
@@ -984,11 +970,11 @@ tr:nth-child(even) td {
     </style>
   </head>
   <body>
-    <div class="container">
+    
       <!-- Login Section -->
       <div id="login-section">
 
-        <div class="login-card">
+        
             
             <!-- *** Addition Start: Back to Homepage Button Header *** -->
 <div class="flex justify-between items-center mb-6">
@@ -1073,7 +1059,7 @@ tr:nth-child(even) td {
               <li><strong>Unmatch</strong>: Data does not meet any match criteria, generally due to extra invoices in either GSTR-2B or GSTR-3B/Books</li>
             </ul>
           </div>
-        </div>
+        
       </div>
 
       <!-- Tool Section -->
@@ -1199,7 +1185,7 @@ tr:nth-child(even) td {
           </a>
         </div>
       </div>
-    </div>
+    
 
     <button class="instructions-btn" onclick="showInstructions()" aria-label="View Instructions">
       <i class="fas fa-info-circle"></i>
