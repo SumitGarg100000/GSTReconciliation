@@ -1,91 +1,67 @@
-# GST Reconciliation Tool - Professional Edition
+# 🌟 GST Reconciliation Tool Pro  
+### *Your Ultimate GSTR-2B vs GSTR-3B Matching Solution*
 
-![GST Reconciliation Tool Preview](https://sumitgarg100000.github.io/GSTReconciliation/Image.jpg)
+<p align="center">
+  <a href="https://sumitgarg100000.github.io/GSTReconciliation/" target="_blank">
+    <img src="https://img.shields.io/badge/🚀_Live_Demo-1a73e8?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Live Demo">
+  </a>
+  <a href="https://sumitgarg100000.github.io/Home/" target="_blank">
+    <img src="https://img.shields.io/badge/🏠_Home_Page-34a853?style=for-the-badge&logo=home&logoColor=white" alt="Home Page">
+  </a>
+</p>
 
-A comprehensive tool for reconciling GST data between GSTR-2B and GSTR-3B/books with advanced matching capabilities.
-
-## Features
-
-- **Secure Login System**: Username/password authentication with subscription management
-- **Excel Data Processing**: Upload Excel files containing GSTR-2B and GSTR-3B data
-- **Advanced Reconciliation**:
-  - Multiple matching criteria (GSTN, Invoice No., Date combinations)
-  - Configurable difference tolerance for amounts
-  - Detailed vs. simple reconciliation views
-- **Data Visualization**:
-  - Color-coded results based on match status
-  - Comprehensive summary tables
-- **Data Export**: Download reconciled results in Excel format
-- **User-Friendly Interface**: 
-  - Editable tables (for authorized users)
-  - Column filtering and sorting
-  - Responsive design for all devices
-
-## How to Use
-
-### Step-by-Step Guide
-
-1. **Log in** using your credentials
-2. **Download Sample File** to understand the required format
-3. **Prepare Your Data**:
-   - Enter GSTR-2B data in "GST Portal" sheet
-   - Enter GSTR-3B/books data in "Client Data" sheet
-4. **Upload File** using the upload interface
-5. **Configure Settings**:
-   - Set difference allowed (default: 1)
-   - Choose detailed or simple reconciliation
-   - Enable filters if needed
-6. **Reconcile Data** and review results
-7. **Download Output** for your records
-
-### Matching Criteria
-
-#### Detailed Reconciliation:
-- **Match - GSTN, Invoice No., Date**: Exact match on all three fields
-- **Match - GSTN, Invoice No.**: Match on GSTN and invoice number
-- **Match - GSTN, Date**: Match on GSTN and date
-- **Match - GSTN**: Match only on GSTN
-- **Unmatch - GSTN Not Exist**: GSTN not found in other sheet
-- **Unmatch - Amt Diff**: Matching GSTN/Invoice but amount differences
-- **Unmatch**: Other cases
-
-#### Simple Reconciliation:
-- **Match**: Any matching criteria met
-- **Unmatch - GSTN Not Exist**
-- **Unmatch - Amt Diff**
-- **Unmatch**: Other cases
-
-## Technical Details
-
-- **Frontend**: HTML5, CSS3 (Tailwind CSS), JavaScript
-- **Libraries**: 
-  - ExcelJS for Excel file generation
-  - SheetJS for Excel file parsing
-  - Font Awesome for icons
-- **Data Processing**: Client-side JavaScript for all reconciliation logic
-- **Storage**: LocalStorage for session persistence
-
-## Free vs. Premium Features
-
-| Feature | Free | Premium |
-|---------|------|---------|
-| Basic Reconciliation | ✓ | ✓ |
-| Detailed Reconciliation | ✗ | ✓ |
-| Adjustable Difference Tolerance | ✗ | ✓ |
-| Table Filters | ✗ | ✓ |
-| Editable Cells | ✗ | ✓ |
-
-## Support
-
-For assistance, contact:
-- **Phone**: 9716804520
-- **Email**: SumitGarg100000@gmail.com
-- **Address**: Rohini, Delhi-110086
-
-## License
-
-This project is proprietary software. Unauthorized distribution or modification is prohibited.
+<div align="center">
+  <img src="https://sumitgarg100000.github.io/GSTReconciliation/Image.jpg" width="80%" style="border-radius: 15px; box-shadow: 0 10px 30px rgba(26, 115, 232, 0.3); transition: transform 0.5s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+</div>
 
 ---
 
-Developed by **Sumit Garg** - GST and Financial Reconciliation Specialist
+## ✨ **Key Features**
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 30px 0;">
+
+<div style="background: linear-gradient(145deg, #f5f9ff, #e6f3ff); padding: 20px; border-radius: 12px; border-left: 4px solid #1a73e8; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+<h3 style="color: #0d47a1">🔒 Secure Authentication</h3>
+<p>Role-based access with subscription management and expiry tracking</p>
+</div>
+
+<div style="background: linear-gradient(145deg, #f5f9ff, #e6f3ff); padding: 20px; border-radius: 12px; border-left: 4px solid #1a73e8; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+<h3 style="color: #0d47a1">📊 Smart Reconciliation</h3>
+<p>7-level matching algorithm with configurable tolerance (₹1 default)</p>
+</div>
+
+<div style="background: linear-gradient(145deg, #f5f9ff, #e6f3ff); padding: 20px; border-radius: 12px; border-left: 4px solid #1a73e8; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+<h3 style="color: #0d47a1">🎨 Visual Analytics</h3>
+<p>Color-coded results with detailed/simple view toggle</p>
+</div>
+
+<div style="background: linear-gradient(145deg, #f5f9ff, #e6f3ff); padding: 20px; border-radius: 12px; border-left: 4px solid #1a73e8; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+<h3 style="color: #0d47a1">🔍 Advanced Filters</h3>
+<p>Column-wise filtering with multi-select and search</p>
+</div>
+
+<div style="background: linear-gradient(145deg, #f5f9ff, #e6f3ff); padding: 20px; border-radius: 12px; border-left: 4px solid #1a73e8; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+<h3 style="color: #0d47a1">📥 Excel Integration</h3>
+<p>Import/export with formatted Excel templates</p>
+</div>
+
+<div style="background: linear-gradient(145deg, #f5f9ff, #e6f3ff); padding: 20px; border-radius: 12px; border-left: 4px solid #1a73e8; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+<h3 style="color: #0d47a1">📱 Responsive Design</h3>
+<p>Works flawlessly on desktop, tablet & mobile</p>
+</div>
+
+</div>
+
+---
+
+## 🚀 **Quick Start Guide**
+
+```mermaid
+graph TD
+    A[Login] --> B[Download Sample]
+    B --> C[Prepare Data]
+    C --> D[Upload Excel]
+    D --> E[Set Parameters]
+    E --> F[Reconcile]
+    F --> G[Review Results]
+    G --> H[Download Report]
