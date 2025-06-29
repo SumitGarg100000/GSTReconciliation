@@ -1,190 +1,69 @@
+# 🚀 GST Reconciliation Tool - Professional Edition
 
-```markdown
-# 💻 Sumit Garg - GST Reconciliation Tool Developer
+![GST Reconciliation Tool Preview](https://sumitgarg100000.github.io/GSTReconciliation/Image.jpg)
 
-![GST Reconciliation Banner](https://sumitgarg100000.github.io/GSTReconciliation/Image.jpg)
+A powerful tool to reconcile your GST data between GSTR-2B and GSTR-3B/books in seconds! This tool helps businesses and tax professionals easily match invoices, identify discrepancies, and generate comprehensive reconciliation reports.
 
----
+## 🌟 Features
 
-## 🌟 Project Spotlight: GST Reconciliation Tool
+- **Fast & Accurate Reconciliation**: Match thousands of invoices in seconds
+- **Multiple Matching Criteria**: GSTN, Invoice No., Date, or any combination
+- **Flexible Tolerance**: Set acceptable difference in amounts
+- **Detailed Reports**: Color-coded results for easy analysis
+- **Excel Integration**: Import/export data in Excel format
+- **Secure Login**: Protect your sensitive GST data
+- **Free & Paid Versions**: Try basic features for free or unlock advanced functionality
 
-A cutting-edge, client-side tool designed to streamline GST reconciliation with precision and speed. Built with modern web technologies, it offers a seamless user experience and robust functionality.
+## 🎥 Demo Video
 
----
+[![Watch Tutorial](https://img.youtube.com/vi/pTR1yrEHlrU/0.jpg)](https://youtu.be/pTR1yrEHlrU)
 
-### 🏛️ System Architecture
+## 🚀 Live Demo
 
-```mermaid
-graph TD
-    A[Login System] --> B[Data Processing Engine]
-    B --> C[Reconciliation Logic]
-    C --> D[UI Framework]
-    A -->|Secure Auth| E[User Management]
-    B -->|Excel Parsing| F[Date Normalization]
-    C -->|7-Level Matching| G[Batch Processing]
-    D -->|Responsive Design| H[Interactive Tables]
-```
+Try the tool now: [Live Demo](https://sumitgarg100000.github.io/GSTReconciliation/)
 
-#### Core Components:
-1. **Secure Login System**  
-   - Role-based access with expiry tracking  
-   - Free tier with premium feature unlocks  
+## 📋 How to Use
 
-2. **Data Processing Engine**  
-   - High-performance Excel parsing (XLSX, ExcelJS)  
-   - Multi-format date normalization  
-   - Smart matching algorithms  
+1. **Log in** with your credentials
+2. **Download** the sample Excel template
+3. **Prepare** your GSTR-2B and GSTR-3B data
+4. **Upload** your Excel file
+5. **Set** your reconciliation preferences
+6. **Click Reconcile** to process your data
+7. **Review** matched and unmatched invoices
+8. **Download** the reconciled report
 
-3. **Reconciliation Logic**  
-   - 7-tier matching with tolerance controls  
-   - Batch processing for large datasets  
-   - Audit-ready outputs  
+## 🔍 Understanding Match Criteria
 
-4. **Intuitive UI Framework**  
-   - Sleek, mobile-first Tailwind CSS design  
-   - Real-time data editing and visualization  
-   - Dynamic, interactive tables  
+### Detailed Reconciliation (Enabled)
+- ✅ **Match - GSTN, Invoice No., Date**: Exact match on all three fields
+- ✅ **Match - GSTN, Invoice No.**: Match on GSTN and invoice number
+- ✅ **Match - GSTN, Date**: Match on GSTN and date
+- ✅ **Match - GSTN**: Match only on GSTN
+- ❌ **Unmatch - GSTN Not Exist**: GSTN not found in other sheet
+- ❌ **Unmatch - Amt Diff**: GSTN matches but amounts differ
+- ❌ **Unmatch**: No match criteria met
 
----
+### Simple Reconciliation (Disabled)
+- ✅ **Match**: Any level of match
+- ❌ **Unmatch - GSTN Not Exist**
+- ❌ **Unmatch - Amt Diff**
+- ❌ **Unmatch**
 
-### 🚀 Key Features
+## 📞 Contact
 
-| **Feature**            | **Description**                              | **Tech Stack**             |
-|------------------------|----------------------------------------------|----------------------------|
-| **Advanced Matching**  | 7-level criteria with customizable tolerance | Custom JS Algorithms        |
-| **Excel Integration**  | Seamless Excel I/O with rich formatting      | ExcelJS, SheetJS           |
-| **Date Handling**      | Multi-format date parsing & normalization    | date-fns, Custom Parsers   |
-| **Responsive UI**      | Mobile-friendly, fluid controls              | Tailwind CSS               |
+For support or premium features:
+- **Name**: Sumit Garg
+- **Phone**: [+91 9716804520](tel:+919716804520)
+- **Email**: [SumitGarg100000@gmail.com](mailto:SumitGarg100000@gmail.com)
+- **Address**: Rohini, Delhi-110086
 
----
+[![Chat on WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/9716804520)
 
-### 🧩 Code Showcase
+## 🌐 Main Website
 
-```javascript
-// Smart Date Parser (5+ formats supported)
-const parseAndFormatDate = (dateInput) => {
-  if (typeof dateInput === 'number' && dateInput > 40000) {
-    const excelEpoch = new Date(1899, 11, 30);
-    return formatDate(new Date(excelEpoch.getTime() + dateInput * 86400 * 1000));
-  }
-  // Add more format handlers...
-};
-
-// Multi-Level Matching Logic
-const findMatch = (row, sourceData, compareData, is3b, diffAllowed) => {
-  // Levels: 
-  // 1. Exact (GSTN+InvNo+Date)
-  // 2. GSTN+InvoiceNo
-  // 3. GSTN+Date
-  // 4. GSTN Only
-  // 5. Unmatched (Missing GSTN)
-  // 6. Amount Difference
-  // 7. Complete Mismatch
-};
-
-// Dynamic Excel Export
-const generateOutput = async (reconciled2bData, reconciled3bData) => {
-  const workbook = new ExcelJS.Workbook();
-  const ws1 = workbook.addWorksheet('GST Portal', { properties: { tabColor: { argb: 'FF1A73E8' } } });
-  const ws2 = workbook.addWorksheet('Client Data', { properties: { tabColor: { argb: 'FFFF6B6B' } } });
-  // Auto-format based on match status
-};
-```
+Visit our main website: [Sumit Garg Professional Services](https://sumitgarg100000.github.io/Home/)
 
 ---
 
-## 🌐 Explore My Work
-
-### 🧾 GST Reconciliation Tool  
-[![Live Demo](https://img.shields.io/badge/LIVE_DEMO-Launch_Tool-1a73e8?style=for-the-badge&logo=rocket)](https://sumitgarg100000.github.io/GSTReconciliation/)
-
-**Why Use It?**  
-✅ 100% client-side processing for maximum privacy  
-✅ Free tier with robust features  
-✅ Detailed audit trails for compliance  
-✅ Lightning-fast performance  
-
-### 🏡 Personal Homepage  
-[![Visit Homepage](https://img.shields.io/badge/🏠_Homepage-Explore_Now-ff6b6b?style=for-the-badge&logo=home)](https://sumitgarg100000.github.io/Home/)
-
----
-
-## 🛠️ Tech Stack
-
-<p align="center">
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white" alt="HTML5" />
-  <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white" alt="CSS3" />
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black" alt="JavaScript" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
-  <img src="https://img.shields.io/badge/Excel-217346?style=flat-square&logo=microsoft-excel&logoColor=white" alt="Excel" />
-</p>
-
----
-
-## 📊 Project Metrics
-
-```text
-Code Breakdown:
-├── Core Logic: 45% (Matching Algorithms)
-├── UI Components: 30% (Interactive Tables)
-├── Excel Integration: 15%
-└── Utilities: 10% (Parsers & Helpers)
-
-Performance Stats:
-✔ Page Load: <1.5s
-✔ Max Rows: 5,000+
-✔ Memory Usage: <50MB
-```
-
----
-
-## 📬 Get in Touch
-
-<p align="center">
-  <a href="https://wa.me/9716804520">
-    <img src="https://img.shields.io/badge/WhatsApp-25D366?style=flat-square&logo=whatsapp&logoColor=white" alt="WhatsApp" />
-  </a>
-  <a href="mailto:SumitGarg100000@gmail.com">
-    <img src="https://img.shields.io/badge/Gmail-D14836?style=flat-square&logo=gmail&logoColor=white" alt="Gmail" />
-  </a>
-  <a href="tel:+919716804520">
-    <img src="https://img.shields.io/badge/Phone-6A5ACD?style=flat-square&logo=phone&logoColor=white" alt="Phone" />
-  </a>
-</p>
-
----
-
-<details>
-<summary>📖 Technical FAQs</summary>
-
-**Q: How does the matching algorithm work?**  
-A: A 7-tier system evaluates matches based on GSTN, Invoice No, Date, and tolerance levels, ensuring accurate reconciliation.
-
-**Q: Is my data secure?**  
-A: Yes! All processing is client-side, so your data never leaves your browser.
-
-**Q: What Excel formats are supported?**  
-A: Both .xlsx and .xls with automatic date detection and formatting.
-
-</details>
-
----
-
-### ✨ What's New?
-- Enhanced UI with Tailwind CSS for a modern look  
-- Improved performance for large datasets (5,000+ rows)  
-- Color-coded Excel exports for better visualization  
-
----
-```
-
-**Changes Made:**
-- Kept the single-file format as you provided.
-- Added a Mermaid diagram for a visual architecture overview.
-- Used `flat-square` badge style for a sleeker look.
-- Streamlined text with concise phrasing and modern emojis.
-- Added a "What's New" section for a fresh touch.
-- Maintained all original sections (Project Analysis, Code Highlights, Live Projects, etc.) with improved formatting.
-- Used consistent typography and spacing for a polished feel.
-
-Let me know if you want more tweaks or specific additions!
+⭐ **Star this repo if you find this tool useful!** ⭐
