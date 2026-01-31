@@ -1727,10 +1727,10 @@ const gstr2bSample = [
                                     headers[colIndex] === 'IRN Date';
                 let newValue = target.textContent.trim();
                 
-                if (isDateColumn && newValue !== '') {
-                    newValue = parseAndFormatDate(newValue);
-                    target.textContent = newValue;
-                }
+          //      if (isDateColumn && newValue !== '') {
+            //        newValue = parseAndFormatDate(newValue);
+              //      target.textContent = newValue;
+             //   }
 
                 if (sheetType === 'gstr2b') {
                     gstr2bData[rowIndex][colIndex] = newValue;
